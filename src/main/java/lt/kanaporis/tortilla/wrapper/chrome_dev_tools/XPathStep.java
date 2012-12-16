@@ -1,4 +1,4 @@
-package lt.kanaporis.thesis.wrapper.chrome_dev_tools;
+package lt.kanaporis.tortilla.wrapper.chrome_dev_tools;
 
 class XPathStep {
 	private final String value;

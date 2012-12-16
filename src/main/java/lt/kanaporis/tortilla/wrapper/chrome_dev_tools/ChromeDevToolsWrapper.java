@@ -1,4 +1,4 @@
-package lt.kanaporis.thesis.wrapper.chrome_dev_tools;
+package lt.kanaporis.tortilla.wrapper.chrome_dev_tools;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -14,9 +14,11 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import lt.kanaporis.thesis.wrapper.ContentWrapper;
-import lt.kanaporis.thesis.wrapper.WrappingResult;
+import lt.kanaporis.tortilla.dom.Utils;
+import lt.kanaporis.tortilla.wrapper.ContentWrapper;
+import lt.kanaporis.tortilla.wrapper.WrappingResult;
 
+import org.apache.commons.lang3.StringUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -33,12 +35,20 @@ public class ChromeDevToolsWrapper implements ContentWrapper {
 	// --- INITIALIZE --------------------------------------
 	
 	public ChromeDevToolsWrapper(String originalDoc, String query) throws SAXException, IOException, ParserConfigurationException, XPathExpressionException {
-		DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-		Document document = builder.parse(new ByteArrayInputStream(originalDoc.getBytes()));
+		if (!StringUtils.endsWith(query, "/text()")) {
+			query += "/text()";
+		}
+		
+		Document dom = Utils.parseHtml(originalDoc);
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
-		Node node = (Node) xpath.evaluate(query, document, XPathConstants.NODE);
+		NodeList nodes = (NodeList) xpath.evaluate(query, dom, XPathConstants.NODESET);
 		
+		if (nodes.getLength() == 0) {
+			throw new RuntimeException("No nodes found.");
+		}
+		
+		Node node = nodes.item(0);
 		if (node.getNodeType() == Node.DOCUMENT_NODE) {
 			optimizedQueryExpr = xpath.compile("/");
 			return;
@@ -71,15 +81,17 @@ public class ChromeDevToolsWrapper implements ContentWrapper {
 	/**
 	 * {@inheritDoc}
 	 */
-	public WrappingResult wrap(String doc) {
+	public WrappingResult wrap(String html) {
 		try {
-			NodeList nodes = (NodeList) optimizedQueryExpr.evaluate(doc, XPathConstants.NODESET);
+			DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+			Document dom = builder.parse(new ByteArrayInputStream(html.getBytes()));
+			NodeList nodes = (NodeList) optimizedQueryExpr.evaluate(dom, XPathConstants.NODESET);
 			if (nodes.getLength() == 0) {
 				return null;
 			}
 			Node node = nodes.item(0);
-			return new WrappingResult(node.getNodeValue(), 1.0);
-		} catch (XPathExpressionException e) {
+			return new WrappingResult(node.getNodeValue());
+		} catch (XPathExpressionException | SAXException | RuntimeException | IOException | ParserConfigurationException e) {
 			throw new RuntimeException(e);
 		}
 	}

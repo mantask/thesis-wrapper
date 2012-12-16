@@ -1,8 +1,8 @@
-package lt.kanaporis.thesis.wrapper;
+package lt.kanaporis.tortilla.wrapper;
 
 public class WrappingResult {
 	private final String value;
-	private final double confidence;
+	private final Double confidence;
 	
 	// --- INITIALIZE --------------------------------------
 	
@@ -11,9 +11,17 @@ public class WrappingResult {
 		this.value = value;
 	}
 
+	public WrappingResult(String value) {
+		this.confidence = null;
+		this.value = value;
+	}
+
 	// --- PROFILE -----------------------------------------
 	
-	public double getConfidence() {
+	/**
+	 * @return 0..1 value of confidence
+	 */
+	public Double getConfidence() {
 		return confidence;
 	}
 

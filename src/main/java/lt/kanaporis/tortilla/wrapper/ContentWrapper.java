@@ -1,4 +1,4 @@
-package lt.kanaporis.thesis.wrapper;
+package lt.kanaporis.tortilla.wrapper;
 
 /**
  * 
