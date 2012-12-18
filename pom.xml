@@ -1,35 +1,41 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+	<modelVersion>4.0.0</modelVersion>
 
-  <groupId>lt.kanaporis.tortilla</groupId>
-  <artifactId>tortilla-core</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
-  <packaging>jar</packaging>
+	<groupId>lt.kanaporis.tortilla</groupId>
+	<artifactId>tortilla-core</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
 
-  <name>Robust XPath Query Optimizer: core logic</name>
+	<name>Robust XPath Query Optimizer: core logic</name>
 
-  <dependencies>
-  
-	<dependency>
-		 <groupId>junit</groupId>
-		 <artifactId>junit</artifactId>
-		 <version>4.0</version>
-		 <scope>test</scope>
-	</dependency>
-	
-	<dependency>
-		<groupId>org.apache.commons</groupId>
-		<artifactId>commons-lang3</artifactId>
-		<version>3.1</version>
-	</dependency>
-	    
-	<dependency>
-		<groupId>it.unibz.inf.tree-edit-distance</groupId>
-		<artifactId>RTED</artifactId>
-		<version>1.1</version>
-	</dependency>
-	    
-  </dependencies>
+	<dependencies>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.0</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>it.unibz.inf.tree-edit-distance</groupId>
+			<artifactId>RTED</artifactId>
+			<version>1.1</version>
+		</dependency>
+
+	</dependencies>
 </project>

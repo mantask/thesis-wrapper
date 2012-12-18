@@ -3,7 +3,6 @@ package lt.kanaporis.tortilla.wrapper.ted.adversarial;
 import java.util.List;
 
 import lt.kanaporis.tortilla.dom.PostOrderNavigator;
-import lt.kanaporis.tortilla.dom.TreeEditScript;
 import lt.kanaporis.tortilla.dom.Utils;
 import lt.kanaporis.tortilla.wrapper.ContentWrapper;
 import lt.kanaporis.tortilla.wrapper.WrappingResult;
@@ -15,6 +14,8 @@ import org.w3c.dom.Node;
 import convenience.RTED;
 
 // TODO might not be the best implementation to multiple element selection
+// TODO might want to associate a different cost per different edit. esp based on the context.
+// TODO currently deals with fixed XML structure. Not ready for invalid HTML trees. move to http://jsoup.org/apidocs/
 public class AdverserialWrapper implements ContentWrapper {
 	
 	private final String originalTree;
@@ -30,17 +31,20 @@ public class AdverserialWrapper implements ContentWrapper {
 	public WrappingResult wrap(String html) {
 		Document dom = Utils.parseHtml(html);
 		String tree = RTEDMapper.map(dom);
-		
-		List<int[]> mapping = RTED.computeMapping(originalTree, tree);
-		TreeEditScript script = new TreeEditScript(originalTree, mapping);
-		int postOrderIndex = script.apply(originalPostOrderIndex);
 		PostOrderNavigator navigator = new PostOrderNavigator(dom);
-		Node node = navigator.get(postOrderIndex);
-
-		double distance = RTED.computeDistance(originalTree, tree);
-		// TODO calculate cost and min dist that breaks wrapper
 		
-		return new WrappingResult(node.toString(), distance);
+		// TODO calculate cost and min dist that breaks wrapper
+		double distance = RTED.computeDistance(originalTree, tree);
+		
+		List<int[]> mappings = RTED.computeMapping(originalTree, tree);
+		for (int[] mapping : mappings) {
+			if (mapping[0] == originalPostOrderIndex) {
+				Node node = navigator.get(mapping[1]);
+				return new WrappingResult(node.getNodeValue(), distance);
+			}
+		}
+
+		return null;
 	}
 
 }

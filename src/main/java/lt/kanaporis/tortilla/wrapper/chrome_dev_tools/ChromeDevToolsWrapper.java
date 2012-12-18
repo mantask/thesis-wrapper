@@ -91,7 +91,7 @@ public class ChromeDevToolsWrapper implements ContentWrapper {
 			}
 			Node node = nodes.item(0);
 			return new WrappingResult(node.getNodeValue());
-		} catch (XPathExpressionException | SAXException | RuntimeException | IOException | ParserConfigurationException e) {
+		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
