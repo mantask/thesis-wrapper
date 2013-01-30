@@ -14,7 +14,6 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
-import lt.kanaporis.tortilla.dom.Utils;
 import lt.kanaporis.tortilla.wrapper.ContentWrapper;
 import lt.kanaporis.tortilla.wrapper.WrappingResult;
 
@@ -39,7 +38,7 @@ public class ChromeDevToolsWrapper implements ContentWrapper {
 			query += "/text()";
 		}
 		
-		Document dom = Utils.parseHtml(originalDoc);
+		Document dom = parseHtml(originalDoc);
 
 		XPath xpath = XPathFactory.newInstance().newXPath();
 		NodeList nodes = (NodeList) xpath.evaluate(query, dom, XPathConstants.NODESET);
@@ -186,4 +185,16 @@ public class ChromeDevToolsWrapper implements ContentWrapper {
 		short rightType = right.getNodeType() == Node.CDATA_SECTION_NODE ? Node.TEXT_NODE : right.getNodeType();
 		return leftType == rightType;
 	}
+
+	private Document parseHtml(String html) {
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			factory.setValidating(false);
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			return builder.parse(new ByteArrayInputStream(html.getBytes()));
+		} catch (Exception e) {
+			return null;
+		}
+	}
+
 }

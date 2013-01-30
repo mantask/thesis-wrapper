@@ -1,10 +1,10 @@
 package lt.kanaporis.tortilla.dom;
 
 import static org.junit.Assert.assertEquals;
-import lt.kanaporis.tortilla.wrapper.ted.RTEDMapper;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 import org.junit.Test;
-import org.w3c.dom.Document;
 
 public class PostOrderNavigatorTest {
 
@@ -12,27 +12,22 @@ public class PostOrderNavigatorTest {
 	
 	@Test
 	public void testGet() {
-		Document doc = Utils.parseHtml(HTML);
-		PostOrderNavigator nav = new PostOrderNavigator(doc);
-		assertEquals(null, nav.get(0));
-		assertEquals("head", RTEDMapper.toString(nav.get(1)));
-		assertEquals("#text", RTEDMapper.toString(nav.get(2)));
-		assertEquals("h1", RTEDMapper.toString(nav.get(3)));
-		assertEquals("@class", RTEDMapper.toString(nav.get(4)));
-		assertEquals("#text", RTEDMapper.toString(nav.get(5)));
-		assertEquals("p", RTEDMapper.toString(nav.get(6)));
-		assertEquals("body", RTEDMapper.toString(nav.get(7)));
-		assertEquals("html", RTEDMapper.toString(nav.get(8)));
-		assertEquals(null, nav.get(9));
+		Document doc = Jsoup.parse(HTML);
+		PostOrderElementNavigator nav = new PostOrderElementNavigator(doc);
+		assertEquals(null, nav.getElementValue(0));
+		assertEquals("Hello there!", nav.getElementValue(1));
+		assertEquals("xxx", nav.getElementValue(2));
+		assertEquals("", nav.getElementValue(3));
+		assertEquals(null, nav.getElementValue(4));
 	}
 
 	@Test
 	public void testIndexAttribute() {
-		Document doc = Utils.parseHtml(HTML);
-		PostOrderNavigator nav = new PostOrderNavigator(doc);
-		assertEquals(4, nav.index("/html/body/p/@class"));
-		assertEquals(8, nav.index("/html"));
-		assertEquals(3, nav.index("/html/body/h1"));
+		Document doc = Jsoup.parse(HTML);
+		PostOrderElementNavigator nav = new PostOrderElementNavigator(doc);
+		assertEquals(1, nav.getElementIndex("h1"));
+		assertEquals(2, nav.getElementIndex("p"));
+		assertEquals(3, nav.getElementIndex("body"));
 	}
 
 }
