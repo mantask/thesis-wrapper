@@ -1,0 +1,4 @@
+http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
+
+Implement terminating clauses for PT.prob().
+Test PT.prob() w/ Example 2 from p.339 on Dalvi'09
