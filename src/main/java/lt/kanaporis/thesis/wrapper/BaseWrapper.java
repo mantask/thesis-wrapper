@@ -1,7 +1,7 @@
 package lt.kanaporis.thesis.wrapper;
 
 import lt.kanaporis.thesis.tree.Forest;
-import lt.kanaporis.thesis.tree.HtmlTreeParser;
+import lt.kanaporis.thesis.tree.HtmlParser;
 import lt.kanaporis.thesis.tree.Node;
 
 /**
@@ -22,7 +22,7 @@ public abstract class BaseWrapper implements Wrapper {
 
     @Override
     public WrapperResult wrap(String newHtml) {
-        return wrap(new HtmlTreeParser().parse(newHtml));
+        return wrap(new HtmlParser().parse(newHtml));
     }
 
     protected abstract WrapperResult wrap(Forest newTree);
