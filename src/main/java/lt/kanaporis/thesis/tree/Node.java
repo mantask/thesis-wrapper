@@ -38,20 +38,19 @@ public class Node {
 
     // -----------------------------------------------------
 
-    public void addChild(Node node) {
+    public Node addChild(Node child) {
         Validate.isTrue(type == NodeType.ELEMENT);
-        children.add(node);
+        children.add(child);
+        child.parent = this;
+        return this;
     }
 
-    public void addChild(Forest forest) {
+    public Node addChild(Forest forest) {
         Validate.isTrue(type == NodeType.ELEMENT);
         for (Node tree : forest.getTrees()) {
             addChild(tree);
         }
-    }
-
-    public void setParent(Node parent) {
-        this.parent = parent;
+        return this;
     }
 
     public Set<Node> getChildren() {
@@ -81,7 +80,7 @@ public class Node {
     @Override
     public String toString() {
         StringBuffer sb = new StringBuffer();
-        sb.append('(');
+        sb.append('{');
         if (type == NodeType.ELEMENT) {
             sb.append(label);
             for (Node child : children) {
@@ -90,8 +89,32 @@ public class Node {
         } else {
             sb.append(label).append("=\"").append(value).append('"');
         }
-        sb.append(')');
+        sb.append('}');
         return sb.toString();
+    }
+
+    public boolean hasChild(Node node) {
+        for (Node child : children) {
+            if (child == node || child.hasChild(node)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Forest getTail(Node distinguishedNode) {
+        // TODO
+        return null;
+    }
+
+    public String getText() {
+        StringBuffer sb = new StringBuffer();
+        if (type == NodeType.ELEMENT) {
+            for (Node child : children) {
+                sb.append(child.getText()).append(' ');
+            }
+        }
+        return sb.toString().trim();
     }
 
     /**

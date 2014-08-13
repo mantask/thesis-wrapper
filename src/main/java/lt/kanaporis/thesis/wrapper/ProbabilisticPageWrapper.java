@@ -1,27 +1,38 @@
-package lt.kanaporis.thesis.wrapper.probabilistic;
+package lt.kanaporis.thesis.wrapper;
 
+import lt.kanaporis.thesis.changemodel.ProbabilisticTransducer;
 import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
-import lt.kanaporis.thesis.wrapper.BaseWrapper;
-import lt.kanaporis.thesis.wrapper.WrapperResult;
+import lt.kanaporis.thesis.tree.PostOrderNavigator;
 
-/**
- * Created by mantas on 8/1/14.
- */
-public class ProbabilisticWrapper extends BaseWrapper {
+import java.util.Map;
+
+public class ProbabilisticPageWrapper {
+
+    private final Node oldTree;
+    private final Node distinguishedNode;
+
+    // TODO init these by transducer
+    private Map<Node, Double> prefixTransformationProbs;
+    private Map<Node, Double> subtreeTransformationProbs;
+
 
     // TODO probabilities = new TreeMap<Node, Double>();
     private ProbabilisticTransducer probabilisticTransducer;
 
-    @Override
-    protected WrapperResult wrap(final Forest newTree) {
+    public ProbabilisticPageWrapper(Node oldTree, Node distinguishedNode) {
+        this.oldTree = oldTree;
+        this.distinguishedNode = distinguishedNode;
+    }
+
+    public Node wrap(final Forest newTree) {
 
         Node bestGuessNode = null;
         double bestGuessProbability = 0.0;
         // TODO Set<Node, Double> candidates = new TreeSet<>();
 
         // Run TP(w, w') and record p_1v, p_2v for all v
-        probabilisticTransducer.prob(oldTree, newTree);
+        probabilisticTransducer.prob(new Forest(oldTree), newTree);
         // TODO record prefixTransformationProbabilities.set(v, 0.123)
 
         // P_2 = w - (tree under u) – (getPrefix of u in w)
@@ -68,6 +79,6 @@ public class ProbabilisticWrapper extends BaseWrapper {
         // TODO use content models to extract the best candidate from all probabilities
         // foreach candidate with highest prob: do content model test
 
-        return new WrapperResult(bestGuessNode.toString(), bestGuessProbability);
+        return bestGuessNode;
     }
 }

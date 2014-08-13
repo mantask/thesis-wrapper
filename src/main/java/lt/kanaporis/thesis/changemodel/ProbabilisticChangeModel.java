@@ -1,4 +1,4 @@
-package lt.kanaporis.thesis.wrapper.probabilistic;
+package lt.kanaporis.thesis.changemodel;
 
 import org.apache.commons.lang3.Validate;
 
@@ -7,13 +7,15 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import static lt.kanaporis.thesis.changemodel.NumberUtils.*;
+
 /**
  * Probabilistic distribution over the next possible state of a web page.
  * θ = { p_stop, { p_del(l) }, { p_ins(l) }, { p_sub(l_1, l_2) } }
  *
  * Created by mantas on 8/1/14.
  */
-public class ChangeModel {
+public class ProbabilisticChangeModel {
 
     private Double stopProb;
     private Map<String, Double> insProbs = new HashMap<>();
@@ -83,6 +85,61 @@ public class ChangeModel {
         Validate.isTrue(0.0 < probability && probability < 1.0);
         stopProb = probability;
     }
+    
+    // --- Verifying ------------------------------------------
+
+    /**
+     * Verifies invariants of change model.
+     */
+    public boolean verify() {
+        return verifyStop() &&
+                verifyDel() &&
+                verifyIns() &&
+                verifySub();
+    }
+
+    private boolean verifySub() {
+        double sum = 0.0;
+        for (String label1 : getLabels()) {
+            for (String label2 : getLabels()) {
+                // TODO even if label1=label2 ?
+                double probSub = getSubProb(label1, label2);
+                if (le(probSub, 0)) {
+                    return false;
+                }
+                sum += probSub;
+            }
+        }
+        return eq(sum, 1.0);
+    }
+
+    private boolean verifyIns() {
+        double sum = 0.0;
+        for (String label : getLabels()) {
+            double probIns = getInsProb(label);
+            if (le(probIns, 0)) {
+                return false;
+            }
+            sum += probIns;
+        }
+        return eq(sum, 1.0);
+    }
+
+    private boolean verifyDel() {
+        for (String label : getLabels()) {
+            double delProb = getDelProb(label);
+            if (lt(delProb, 0) || lt(1, delProb)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean verifyStop() {
+        double stopProb = getStopProb();
+        return lt(0, stopProb) && lt(stopProb, 1);
+    }
+
 
     // --------------------------------------------------------
 

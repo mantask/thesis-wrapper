@@ -1,4 +1,4 @@
-package lt.kanaporis.thesis.wrapper.probabilistic;
+package lt.kanaporis.thesis.changemodel;
 
 import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
@@ -10,9 +10,9 @@ import java.util.Iterator;
  */
 public class ProbabilisticTransducer {
 
-    private final ChangeModel changeModel;
+    private final ProbabilisticChangeModel changeModel;
 
-    public ProbabilisticTransducer(ChangeModel changeModel) {
+    public ProbabilisticTransducer(ProbabilisticChangeModel changeModel) {
         this.changeModel = changeModel;
     }
 
@@ -66,7 +66,7 @@ public class ProbabilisticTransducer {
 
         // add parent to the middle getTrees
         // TODO it's critical to respect the probabilistic distribution of insert operation
-        Node randomRoot = new Node(Node.NodeType.ELEMENT, changeModel.getRandomLabel());
+        Node randomRoot = Node.elem(changeModel.getRandomLabel());
         for (int i = 0; i < subSequenceLength; i++) {
             randomRoot.addChild(fTreeIterator.next());
         }
@@ -96,7 +96,7 @@ public class ProbabilisticTransducer {
             return f;
         } else {
             // TODO it's critical to respect the probabilistic distribution of substitute operation
-            Node newRandomRoot = new Node(Node.NodeType.ELEMENT, changeModel.getRandomLabel());
+            Node newRandomRoot = Node.elem(changeModel.getRandomLabel());
             newRandomRoot.addChild(transform(new Forest(tree.getChildren())));
             return new Forest(newRandomRoot);
         }
