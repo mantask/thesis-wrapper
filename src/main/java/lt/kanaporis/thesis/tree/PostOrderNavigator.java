@@ -2,14 +2,14 @@ package lt.kanaporis.thesis.tree;
 
 import java.util.Iterator;
 
-public class PostOrderNavigator implements Iterable<Node> {
+public class PostOrderNavigator implements Iterable<Tree> {
 
-    public PostOrderNavigator(Forest tree) {
+    public PostOrderNavigator(Tree tree) {
         // TODO
     }
 
     @Override
-    public Iterator<Node> iterator() {
+    public Iterator<Tree> iterator() {
         // TODO
         return null;
     }

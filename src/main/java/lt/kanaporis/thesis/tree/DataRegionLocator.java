@@ -4,7 +4,7 @@ import java.util.List;
 
 public class DataRegionLocator {
 
-    public static List<Node> locate(Node boundary) {
+    public static List<Tree> locate(Tree boundary) {
         return null;
     }
 

@@ -2,8 +2,11 @@ package lt.kanaporis.thesis.changemodel;
 
 import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
+import lt.kanaporis.thesis.tree.Tree;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Created by mantas on 8/1/14.
@@ -25,7 +28,7 @@ public class ProbabilisticTransducer {
      */
     public Forest transform(Forest forest) {
         Forest transformedForest = new Forest();
-        for (Node tree : forest.getTrees()) {
+        for (Tree tree : forest.trees()) {
             transformedForest = transformedForest.add(transformByDeleteAndSubstitute(tree));
         }
         return transformByInsert(transformedForest);
@@ -47,37 +50,22 @@ public class ProbabilisticTransducer {
 
     /**
      * An insert operation that adds a node at the top of the forest chosen randomly from all such operations.
+     * Copy first trees, add a new root to middle trees, and copy last trees.
      *
      * @param forest
      * @return
      */
     private Forest insertRandomRoot(Forest forest) {
-        int fTreeCount = forest.getTrees().size();
-        int subSequenceStart = new Double(Math.random() * fTreeCount - 1).intValue();
-        int subSequenceLength = new Double(Math.random() * (fTreeCount - subSequenceStart - 1)).intValue();
-        Iterator<Node> fTreeIterator = forest.getTrees().iterator();
-
-        Forest transformedForest = new Forest();
-
-        // copy first getTrees
-        for (int i = 0; i < subSequenceStart; i++) {
-            transformedForest = transformedForest.add(fTreeIterator.next());
-        }
-
-        // add parent to the middle getTrees
-        // TODO it's critical to respect the probabilistic distribution of insert operation
-        Node randomRoot = Node.elem(changeModel.getRandomLabel());
-        for (int i = 0; i < subSequenceLength; i++) {
-            randomRoot.addChild(fTreeIterator.next());
-        }
-        transformedForest = transformedForest.add(randomRoot);
-
-        // copy last getTrees
-        for (int i = subSequenceStart + subSequenceLength + 1; i < fTreeCount; i++) {
-            transformedForest = transformedForest.add(fTreeIterator.next());
-        }
-
-        return transformedForest;
+        int length = forest.trees().size();
+        int fromIx = new Double(Math.random() * length - 1).intValue();
+        int thruIx = fromIx + new Double(Math.random() * (length - fromIx - 1)).intValue();
+        List<Tree> transformedTrees = new ArrayList<>();
+        transformedTrees.addAll(forest.trees().subList(0, fromIx));
+        transformedTrees.add(new Tree(
+                Node.elem(changeModel.getRandomLabel()), // new random root
+                forest.trees().subList(fromIx, thruIx).toArray(new Tree[] {}))); // sub-forest as children
+        transformedTrees.addAll(forest.trees().subList(thruIx, length));
+        return new Forest(transformedTrees);
     }
 
     /**
@@ -87,22 +75,33 @@ public class ProbabilisticTransducer {
      * @param tree
      * @return
      */
-    private Forest transformByDeleteAndSubstitute(Node tree) {
-        if (Math.random() < changeModel.getDelProb(tree.getLabel())) {
+    private Forest transformByDeleteAndSubstitute(Tree tree) {
+        if (Math.random() < changeModel.getDelProb(tree.root().label())) {
             Forest f = new Forest();
-            for (Node child : tree.getChildren()) {
-                f = f.add(transformByDeleteAndSubstitute(child));
+            for (Tree subtree : tree.children()) {
+                f = f.add(transformByDeleteAndSubstitute(subtree));
             }
             return f;
         } else {
-            // TODO it's critical to respect the probabilistic distribution of substitute operation
-            Node newRandomRoot = Node.elem(changeModel.getRandomLabel());
-            newRandomRoot.addChild(transform(new Forest(tree.getChildren())));
-            return new Forest(newRandomRoot);
+            return new Forest(new Tree(
+                    Node.elem(changeModel.getRandomLabel()), // random root
+                    transform(new Forest(tree.children()))));
         }
     }
 
     // -------------------------------------------------------------
+
+    public double prob(Tree origTree, Tree transTree) {
+        return prob(new Forest(origTree), new Forest(transTree));
+    }
+
+    public double prob(Tree origTree, Forest transForest) {
+        return prob(new Forest(origTree), transForest);
+    }
+
+    public double prob(Forest origForest, Tree transTree) {
+        return prob(origForest, new Forest(transTree));
+    }
 
     /**
      * Calculates the prob of transforming a tree f1 into a tree f2, given insertion,
@@ -119,18 +118,16 @@ public class ProbabilisticTransducer {
      */
     public double prob(Forest origForest, Forest transForest) {
 
-        // TODO add more of termination conditoins
-        if (transForest.isEmpty()) {
+        // TODO add more of termination conditions
+        if (transForest.empty()) {
             return changeModel.getStopProb();
         }
 
         // TODO add Optimizations for similar trees (ref §4.1.1 Dalvi'09)
-
-        Node lastRootOfTransForest = transForest.getLastTree();
         // TODO record Prob2[origForest][transForest] when origForest.isTree() & transForest.isTree() for ProbabilisticWrapper
         // TODO somehow record Prob1[origForest][transForest], ie how do we tell by the forest the prefix?
-        double probabilityWhenLastTreeRootWasInserted = changeModel.getInsProb(lastRootOfTransForest.getLabel()) *
-                prob(origForest, transForest.removeNode(lastRootOfTransForest));
+        double probabilityWhenLastTreeRootWasInserted = changeModel.getInsProb(transForest.lastTree().root().label()) *
+                prob(origForest, transForest.removeLastTreeNode());
         return probWhenLastTreeRootWasSub(origForest, transForest) +
                 probabilityWhenLastTreeRootWasInserted;
     }
@@ -150,13 +147,13 @@ public class ProbabilisticTransducer {
      * @return Probability of transforming original tree into transformed one. Result in the range of [0..1].
      */
     public double probWhenLastTreeRootWasSub(Forest origForest, Forest transForest) {
-        Node lastRootOfOrigForest = origForest.getLastTree();
-        Node lastRootOfTransForest = transForest.getLastTree();
-        return changeModel.getSubProb(lastRootOfOrigForest.getLabel(), lastRootOfTransForest.getLabel()) *
-                prob(origForest.removeTree(lastRootOfOrigForest), transForest.removeTree(lastRootOfTransForest)) *
-                prob(lastRootOfOrigForest.getSubForest(), lastRootOfTransForest.getSubForest()) +
-                changeModel.getDelProb(lastRootOfOrigForest.getLabel()) *
-                probWhenLastTreeRootWasSub(origForest.removeNode(lastRootOfOrigForest), transForest);
+        Tree lastOrigTree = origForest.lastTree();
+        Tree lastTransTree = transForest.lastTree();
+        return changeModel.getSubProb(lastOrigTree.root().label(), lastTransTree.root().label()) *
+                prob(origForest.removeLastTree(), transForest.removeLastTree()) *
+                prob(lastOrigTree.subforest(), lastTransTree.subforest()) +
+                changeModel.getDelProb(lastOrigTree.root().label()) *
+                probWhenLastTreeRootWasSub(origForest.removeLastTreeNode(), transForest);
     }
 
 }

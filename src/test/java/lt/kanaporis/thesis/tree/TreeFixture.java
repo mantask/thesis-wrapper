@@ -5,15 +5,15 @@ import static lt.kanaporis.thesis.tree.Node.text;
 
 public class TreeFixture {
 
-    public Node htmlTree = elem("html")
-            .addChild(elem("head"))
-            .addChild(elem("body")
-                .addChild(elem("h1")
-                    .addChild(text("Hello, world!")))
-                .addChild(elem("p")
-                    .addChild(text("Body text goes "))
-                    .addChild(elem("strong")
-                        .addChild(text("here")))
-                    .addChild(text("!"))));
+    public static Tree html = new Tree(elem("html"),
+            new Tree(elem("head")),
+            new Tree(elem("body"),
+                new Tree(elem("h1"),
+                    new Tree(text("Hello, World!"))),
+                new Tree(elem("p"),
+                    new Tree(text("Body text goes ")),
+                    new Tree(elem("strong"),
+                        new Tree(text("here"))),
+                    new Tree(text("!")))));
 
 }

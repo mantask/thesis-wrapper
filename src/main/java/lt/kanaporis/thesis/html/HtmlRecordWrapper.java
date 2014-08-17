@@ -1,6 +1,7 @@
 package lt.kanaporis.thesis.html;
 
 import lt.kanaporis.thesis.tree.Node;
+import lt.kanaporis.thesis.tree.Tree;
 import lt.kanaporis.thesis.wrapper.ProbabilisticRecordWrapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +17,7 @@ public class HtmlRecordWrapper {
 
     public HtmlRecordWrapper(String html, String selector) {
         Document dom = Jsoup.parse(html);
-        Node tree = TreeFactory.buildFromDom(dom);
+        Tree tree = TreeFactory.buildFromDom(dom);
         Elements distinquishedElems = dom.select(selector);
         if (distinquishedElems.size() != 1) {
             throw new IllegalStateException("Selector cannot locate a unique distinquished node.");
@@ -27,7 +28,7 @@ public class HtmlRecordWrapper {
 
     public List<String> wrap(String html) {
         Document dom = Jsoup.parse(html);
-        Node tree = TreeFactory.buildFromDom(dom);
+        Tree tree = TreeFactory.buildFromDom(dom);
         List<Node> nodes = wrapper.wrap(tree);
         return toString(nodes);
     }
@@ -35,12 +36,12 @@ public class HtmlRecordWrapper {
     public List<String> toString(List<Node> nodes) {
         List<String> nodesStr = new ArrayList<>();
         for (Node node : nodes) {
-            nodesStr.add(node.getText());
+            nodesStr.add(node.text());
         }
         return nodesStr;
     }
 
-    private Node locate(Document dom, Node origTree, Elements distinquishedElems) {
+    private Node locate(Document dom, Tree origTree, Elements distinquishedElems) {
         // TODO
         return null;
     }

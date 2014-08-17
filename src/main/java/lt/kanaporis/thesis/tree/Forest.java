@@ -1,100 +1,80 @@
 package lt.kanaporis.thesis.tree;
 
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Immutable forest of ordered rooted trees.
- *
- * Created by mantas on 8/1/14.
  */
-// TODO make it functional (immutable) data structure
 public class Forest {
 
-    public final Set<Node> trees;
+    private final List<Tree> trees;
 
     // ---- ctor ---------------------------------
 
-    public Forest() {
-        trees = Collections.EMPTY_SET;
+    public Forest(Tree... trees) {
+        this.trees = Collections.unmodifiableList(Arrays.asList(trees));
     }
 
-    public Forest(Node... trees) {
-        Set<Node> newForestTrees = new LinkedHashSet<>();
-        for (Node tree : trees) {
-            newForestTrees.add(tree);
-        }
-        this.trees = Collections.unmodifiableSet(newForestTrees);
-    }
-
-    public Forest(Forest... forests) {
-        Set<Node> newForestTrees = new LinkedHashSet<>();
-        for (Forest forest : forests) {
-            newForestTrees.addAll(forest.getTrees());
-        }
-        this.trees = Collections.unmodifiableSet(newForestTrees);
-    }
-
-    public Forest(Set<Node> nodes) {
-        Set<Node> newForestTrees = new LinkedHashSet<>();
-        newForestTrees.addAll(nodes);
-        this.trees = Collections.unmodifiableSet(newForestTrees);
+    public Forest(List<Tree> trees) {
+        this.trees = Collections.unmodifiableList(trees);
     }
 
     // --------------------------------------------
 
-    public Forest add(Node... trees) {
-        Set<Node> newForestTrees = new LinkedHashSet<>();
-        newForestTrees.addAll(this.trees);
-        for (Node tree : trees) {
-            newForestTrees.add(tree);
-        }
-        return new Forest(newForestTrees);
-    }
-
-    public Forest add(Forest... forests) {
-        Set<Node> newForestTrees = new LinkedHashSet<>();
-        newForestTrees.addAll(this.trees);
-        for (Forest forest : forests) {
-            newForestTrees.addAll(forest.getTrees());
-        }
-        return new Forest(newForestTrees);
-    }
-
-    public Forest removeNode(Node node) {
-        // TODO
-        return null;
-    }
-
-    public Forest removeTree(Node tree) {
-        // TODO
-        return null;
-    }
-
-    public boolean isTree() {
-        return trees.size() == 1;
-    }
-
-    public Node getLastTree() {
-        return (Node) trees.toArray()[trees.size() - 1];
-    }
-
-    public Forest getPrefix(Node u) {
-        // TODO
-        return null;
-    }
-
-    public Forest getTail(Node u) {
-        // TODO
-        return null;
-    }
-
-    public Set<Node> getTrees() {
+    public List<Tree> trees() {
         return trees;
     }
 
-    public boolean isEmpty() {
+    public Tree tree(int i) {
+        return trees.get(i);
+    }
+
+    public Forest add(Forest that) {
+        return add(that.trees());
+    }
+
+    public Forest add(List<Tree> newTrees) {
+        List<Tree> trees = new ArrayList<>(this.trees.size() + newTrees.size());
+        trees.addAll(this.trees);
+        trees.addAll(newTrees);
+        return new Forest(trees);
+    }
+
+    public boolean empty() {
         return trees.size() == 0;
+    }
+
+    public Tree lastTree() {
+        return trees.get(lastTreeIndex());
+    }
+
+    public Forest removeLastTree() {
+        if (empty()) {
+            return new Forest();
+        }
+        return new Forest(trees.subList(0, lastTreeIndex()));
+    }
+
+    public Forest removeLastTreeNode() {
+        if (empty()) {
+            return new Forest();
+        }
+        List<Tree> trees = new ArrayList<>();
+        trees.addAll(this.trees.subList(0, lastTreeIndex()));
+        trees.addAll(this.trees.get(lastTreeIndex()).children());
+        return new Forest(trees);
+    }
+
+    private int lastTreeIndex() {
+        return trees.size() - 1;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (Tree t : trees) {
+            sb.append(t.toString());
+        }
+        return sb.toString();
     }
 }

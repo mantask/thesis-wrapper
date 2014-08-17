@@ -1,8 +1,8 @@
 make the whole thing compile
+
 start unit testing from the bottom, ie node
 
-
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
-
 Implement terminating clauses for PT.prob().
 Test PT.prob() w/ Example 2 from p.339 on Dalvi'09
+Look for extension points w/ text patters in ProbPageWrapper

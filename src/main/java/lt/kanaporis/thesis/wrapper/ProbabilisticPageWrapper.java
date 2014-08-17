@@ -4,12 +4,13 @@ import lt.kanaporis.thesis.changemodel.ProbabilisticTransducer;
 import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.PostOrderNavigator;
+import lt.kanaporis.thesis.tree.Tree;
 
 import java.util.Map;
 
 public class ProbabilisticPageWrapper {
 
-    private final Node oldTree;
+    private final Tree oldTree;
     private final Node distinguishedNode;
 
     // TODO init these by transducer
@@ -20,39 +21,39 @@ public class ProbabilisticPageWrapper {
     // TODO probabilities = new TreeMap<Node, Double>();
     private ProbabilisticTransducer probabilisticTransducer;
 
-    public ProbabilisticPageWrapper(Node oldTree, Node distinguishedNode) {
+    public ProbabilisticPageWrapper(Tree oldTree, Node distinguishedNode) {
         this.oldTree = oldTree;
         this.distinguishedNode = distinguishedNode;
     }
 
-    public Node wrap(final Forest newTree) {
+    public Tree wrap(final Tree newTree) {
 
-        Node bestGuessNode = null;
+        Tree bestGuessNode = null;
         double bestGuessProbability = 0.0;
         // TODO Set<Node, Double> candidates = new TreeSet<>();
 
         // Run TP(w, w') and record p_1v, p_2v for all v
-        probabilisticTransducer.prob(new Forest(oldTree), newTree);
+        probabilisticTransducer.prob(new Forest(oldTree), new Forest(newTree));
         // TODO record prefixTransformationProbabilities.set(v, 0.123)
 
         // P_2 = w - (tree under u) – (getPrefix of u in w)
-        Forest distinguishedNodeTail = oldTree.getTail(distinguishedNode);
+        Tree distinguishedNodeTail = oldTree.tail(distinguishedNode);
 
         // Run TP(P_2, w') and record probabilities of P_2 → complete subtrees of w'
         probabilisticTransducer.prob(distinguishedNodeTail, newTree);
         // TODO record subtreeTransformationProbabilities.set(v, 0.123)
 
         // foreach v in w' do
-        for (Node candidateNode : new PostOrderNavigator(newTree)) {
+        for (Tree candidateNode : new PostOrderNavigator(newTree)) {
 
             // P'_2 = w' - (tree under v) - (getPrefix of v in w')
-            Forest candidateNodeTail = newTree.getTail(candidateNode);
+            Tree candidateNodeTail = newTree.tail(candidateNode.root());
 
             // foreach z in P_2 in PostOrder do
-            for (Node tailNode : new PostOrderNavigator(candidateNodeTail)) {
+            for (Tree tailTree : new PostOrderNavigator(candidateNodeTail)) {
 
                 // P''_2 = getPrefix of z in P_2
-                Forest tailNodePrefix = candidateNodeTail.getPrefix(tailNode);
+                Forest tailNodePrefix = candidateNodeTail.prefix(tailTree.root());
 
                 // TP(P''_2, P'_2)
                 probabilisticTransducer.prob(tailNodePrefix, candidateNodeTail);
