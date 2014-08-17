@@ -1,16 +1,23 @@
 package lt.kanaporis.thesis.tree;
 
-import java.util.Iterator;
+import org.apache.commons.lang3.Validate;
 
-public class PostOrderNavigator implements Iterable<Tree> {
+import java.util.*;
 
-    public PostOrderNavigator(Tree tree) {
-        // TODO
+public class PostOrderNavigator {
+
+    public static List<Tree> sort(Tree tree) {
+        Validate.notNull(tree);
+        List<Tree> sorted = new ArrayList<>();
+        sort(tree, sorted);
+        return sorted;
     }
 
-    @Override
-    public Iterator<Tree> iterator() {
-        // TODO
-        return null;
+    public static void sort(Tree curr, List<Tree> sorted) {
+        for (Tree child : curr.children()) {
+            sort(child, sorted);
+        }
+        sorted.add(curr);
     }
+
 }
