@@ -13,7 +13,7 @@ public class ProbabilisticChangeModelFactory {
     public static ProbabilisticChangeModel buildFromCsv(String filename) {
         ProbabilisticChangeModel changeModel = new ProbabilisticChangeModel();
         // TODO
-        Validate.isTrue(changeModel.verify(), "Change model invariants do not hold!");
+        Validate.isTrue(changeModel.valid(), "Change model invariants do not hold!");
         return changeModel;
     }
 

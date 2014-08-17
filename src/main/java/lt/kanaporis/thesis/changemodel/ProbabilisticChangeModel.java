@@ -47,6 +47,9 @@ public class ProbabilisticChangeModel {
     public String getRandomLabel() {
         // TODO must take prob distribution into account, e.g. p_ins(l)
         int labelCount = labels.size();
+        if (labelCount == 0) {
+            return null;
+        }
         int pos = new Double(Math.random() * labelCount).intValue();
         Object[] labelArray = labels.toArray();
         for (int i = pos; ; i = (i + 1) % labels.size()) {
@@ -91,29 +94,31 @@ public class ProbabilisticChangeModel {
     /**
      * Verifies invariants of change model.
      */
-    public boolean verify() {
-        return verifyStop() &&
-                verifyDel() &&
-                verifyIns() &&
-                verifySub();
+    public boolean valid() {
+        return validStop() &&
+                validDel() &&
+                validIns() &&
+                validSub();
     }
 
-    private boolean verifySub() {
+    private boolean validSub() {
         double sum = 0.0;
         for (String label1 : getLabels()) {
             for (String label2 : getLabels()) {
-                // TODO even if label1=label2 ?
-                double probSub = getSubProb(label1, label2);
-                if (le(probSub, 0)) {
-                    return false;
+                if (!label1.equals(label2)) {
+                    // TODO even if label1=label2 ?
+                    double probSub = getSubProb(label1, label2);
+                    if (le(probSub, 0)) {
+                        return false;
+                    }
+                    sum += probSub;
                 }
-                sum += probSub;
             }
         }
         return eq(sum, 1.0);
     }
 
-    private boolean verifyIns() {
+    private boolean validIns() {
         double sum = 0.0;
         for (String label : getLabels()) {
             double probIns = getInsProb(label);
@@ -125,7 +130,7 @@ public class ProbabilisticChangeModel {
         return eq(sum, 1.0);
     }
 
-    private boolean verifyDel() {
+    private boolean validDel() {
         for (String label : getLabels()) {
             double delProb = getDelProb(label);
             if (lt(delProb, 0) || lt(1, delProb)) {
@@ -135,11 +140,10 @@ public class ProbabilisticChangeModel {
         return true;
     }
 
-    private boolean verifyStop() {
+    private boolean validStop() {
         double stopProb = getStopProb();
         return lt(0, stopProb) && lt(stopProb, 1);
     }
-
 
     // --------------------------------------------------------
 
