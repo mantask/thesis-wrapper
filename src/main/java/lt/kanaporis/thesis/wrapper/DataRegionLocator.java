@@ -1,8 +1,10 @@
-package lt.kanaporis.thesis.tree;
+package lt.kanaporis.thesis.wrapper;
+
+import lt.kanaporis.thesis.tree.Tree;
 
 import java.util.List;
 
-public class DataRegionLocator {
+class DataRegionLocator {
 
     public static List<Tree> locate(Tree boundary) {
         return null;

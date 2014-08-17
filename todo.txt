@@ -1,6 +1,8 @@
-make the whole thing compile
-
-start unit testing from the bottom, ie node
+unit test ProbabilisticChangeModel
+unit test ProbabilisticTransducer
+unit test DataRegionLocator
+unit test ProbabilisticPageWrapper
+unit test ProbabilisticRecordWrapper
 
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
 Implement terminating clauses for PT.prob().

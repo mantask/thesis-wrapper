@@ -1,7 +1,5 @@
 package lt.kanaporis.thesis.wrapper;
 
-import lt.kanaporis.thesis.tree.DataRegionLocator;
-import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 

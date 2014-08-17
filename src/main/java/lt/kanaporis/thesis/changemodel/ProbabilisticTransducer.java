@@ -8,9 +8,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * Created by mantas on 8/1/14.
- */
 public class ProbabilisticTransducer {
 
     private final ProbabilisticChangeModel changeModel;

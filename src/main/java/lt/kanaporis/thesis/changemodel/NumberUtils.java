@@ -1,9 +1,6 @@
 package lt.kanaporis.thesis.changemodel;
 
-/**
- * Created by mantas on 8/13/14.
- */
-public final class NumberUtils {
+final class NumberUtils {
 
     public static boolean eq(double a, double b) {
         return Math.abs(a - b) < 1E-6;
