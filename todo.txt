@@ -1,6 +1,5 @@
-unit test ProbabilisticTransducer
-unit test DataRegionLocator
 unit test ProbabilisticPageWrapper
+unit test DataRegionLocator
 unit test ProbabilisticRecordWrapper
 
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
