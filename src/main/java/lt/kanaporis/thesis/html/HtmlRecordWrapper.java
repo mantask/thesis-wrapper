@@ -17,7 +17,7 @@ public class HtmlRecordWrapper {
 
     public HtmlRecordWrapper(String html, String selector) {
         Document dom = Jsoup.parse(html);
-        Tree tree = TreeFactory.buildFromDom(dom);
+        Tree tree = HtmlTreeFactory.buildFromDom(dom);
         Elements distinquishedElems = dom.select(selector);
         if (distinquishedElems.size() != 1) {
             throw new IllegalStateException("Selector cannot locate a unique distinquished node.");
@@ -28,7 +28,7 @@ public class HtmlRecordWrapper {
 
     public List<String> wrap(String html) {
         Document dom = Jsoup.parse(html);
-        Tree tree = TreeFactory.buildFromDom(dom);
+        Tree tree = HtmlTreeFactory.buildFromDom(dom);
         List<Node> nodes = wrapper.wrap(tree);
         return toString(nodes);
     }

@@ -6,7 +6,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 
-public class TreeFactory {
+public class HtmlTreeFactory {
 
     public static Tree buildFromDom(Document dom) {
         return walk(dom.body());

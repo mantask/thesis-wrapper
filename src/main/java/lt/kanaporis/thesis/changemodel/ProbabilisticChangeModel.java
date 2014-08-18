@@ -25,26 +25,26 @@ public class ProbabilisticChangeModel {
 
     // --- Getters ------------------------------------------
 
-    public double getSubProb(String label1, String label2) {
+    public double subProb(String label1, String label2) {
         Double probability = subProbs.get(subKey(label1, label2));
         return probability != null ? probability : 0.0;
     }
 
-    public double getDelProb(String label) {
+    public double delProb(String label) {
         Double probability = delProbs.get(label);
         return probability != null ? probability : 0.0;
     }
 
-    public double getInsProb(String label) {
+    public double insProb(String label) {
         Double probability = insProbs.get(label);
         return probability != null ? probability : 0.0;
     }
 
-    public double getStopProb() {
+    public double stopProb() {
         return stopProb != null ? stopProb : 0.0;
     }
 
-    public String getRandomLabel() {
+    public String randomLabel() {
         // TODO must take prob distribution into account, e.g. p_ins(l)
         int labelCount = labels.size();
         if (labelCount == 0) {
@@ -59,32 +59,32 @@ public class ProbabilisticChangeModel {
         }
     }
 
-    public Set<String> getLabels() {
+    public Set<String> labels() {
         return labels;
     }
 
     // --- Setters ------------------------------------------
 
-    public void setSubProb(String label1, String label2, double probability)  {
+    public void subProb(String label1, String label2, double probability)  {
         Validate.isTrue(0.0 <= probability && probability <= 1.0);
         subProbs.put(subKey(label1, label2), probability);
         labels.add(label1);
         labels.add(label2);
     }
 
-    public void setDelProb(String label, double probability)  {
+    public void delProb(String label, double probability)  {
         Validate.isTrue(0.0 <= probability && probability <= 1.0);
         delProbs.put(label, probability);
         labels.add(label);
     }
 
-    public void setInsProb(String label, double probability)  {
+    public void insProb(String label, double probability)  {
         Validate.isTrue(0.0 <= probability && probability <= 1.0);
         insProbs.put(label, probability);
         labels.add(label);
     }
 
-    public void setStopProb(double probability)  {
+    public void stopProb(double probability)  {
         Validate.isTrue(0.0 < probability && probability < 1.0);
         stopProb = probability;
     }
@@ -103,16 +103,14 @@ public class ProbabilisticChangeModel {
 
     private boolean validSub() {
         double sum = 0.0;
-        for (String label1 : getLabels()) {
-            for (String label2 : getLabels()) {
-                if (!label1.equals(label2)) {
-                    // TODO even if label1=label2 ?
-                    double probSub = getSubProb(label1, label2);
-                    if (le(probSub, 0)) {
-                        return false;
-                    }
-                    sum += probSub;
+        for (String label1 : labels()) {
+            for (String label2 : labels()) {
+                // we allow label1=label2 probabilities in model
+                double probSub = subProb(label1, label2);
+                if (le(probSub, 0)) {
+                    return false;
                 }
+                sum += probSub;
             }
         }
         return eq(sum, 1.0);
@@ -120,8 +118,8 @@ public class ProbabilisticChangeModel {
 
     private boolean validIns() {
         double sum = 0.0;
-        for (String label : getLabels()) {
-            double probIns = getInsProb(label);
+        for (String label : labels()) {
+            double probIns = insProb(label);
             if (le(probIns, 0)) {
                 return false;
             }
@@ -131,8 +129,8 @@ public class ProbabilisticChangeModel {
     }
 
     private boolean validDel() {
-        for (String label : getLabels()) {
-            double delProb = getDelProb(label);
+        for (String label : labels()) {
+            double delProb = delProb(label);
             if (lt(delProb, 0) || lt(1, delProb)) {
                 return false;
             }
@@ -141,7 +139,7 @@ public class ProbabilisticChangeModel {
     }
 
     private boolean validStop() {
-        double stopProb = getStopProb();
+        double stopProb = stopProb();
         return lt(0, stopProb) && lt(stopProb, 1);
     }
 

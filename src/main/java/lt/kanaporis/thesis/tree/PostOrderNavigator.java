@@ -13,7 +13,7 @@ public class PostOrderNavigator {
         return sorted;
     }
 
-    public static void sort(Tree curr, List<Tree> sorted) {
+    private static void sort(Tree curr, List<Tree> sorted) {
         for (Tree child : curr.children()) {
             sort(child, sorted);
         }

@@ -7,6 +7,8 @@ import java.util.*;
  */
 public class Forest {
 
+    public static final Forest EMPTY = new Forest();
+
     private final List<Tree> trees;
 
     // ---- ctor ---------------------------------
@@ -44,20 +46,23 @@ public class Forest {
         return trees.size() == 0;
     }
 
-    public Tree lastTree() {
+    public Tree rightmostTree() {
+        if (empty()) {
+            return null;
+        }
         return trees.get(lastTreeIndex());
     }
 
-    public Forest removeLastTree() {
+    public Forest removeRightmostTree() {
         if (empty()) {
-            return new Forest();
+            return EMPTY;
         }
         return new Forest(trees.subList(0, lastTreeIndex()));
     }
 
-    public Forest removeLastTreeNode() {
+    public Forest removeRightmostRoot() {
         if (empty()) {
-            return new Forest();
+            return EMPTY;
         }
         List<Tree> trees = new ArrayList<>();
         trees.addAll(this.trees.subList(0, lastTreeIndex()));

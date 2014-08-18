@@ -18,7 +18,7 @@ public class ForestTest {
         Forest f = new Forest(new Tree(elem("h1")),
                 new Tree(elem("body")),
                 new Tree(elem("strong")));
-        assertEquals("{strong}", f.lastTree().toString());
+        assertEquals("{strong}", f.rightmostTree().toString());
     }
 
     @Test
@@ -26,35 +26,35 @@ public class ForestTest {
         Forest f = new Forest(new Tree(elem("h1")),
                 new Tree(elem("body")),
                 new Tree(elem("strong")));
-        assertEquals("{h1}{body}", f.removeLastTree().toString());
+        assertEquals("{h1}{body}", f.removeRightmostTree().toString());
     }
 
     @Test
     public void testRemoveLastTreeBecomesEmpty() throws Exception {
         Forest f = new Forest(new Tree(elem("h1")));
-        assertEquals("", f.removeLastTree().toString());
+        assertEquals("", f.removeRightmostTree().toString());
     }
 
     @Test
     public void testRemoveLastTreeForEmptyTree() throws Exception {
         Forest f = new Forest();
-        assertEquals("", f.removeLastTree().toString());
+        assertEquals("", f.removeRightmostTree().toString());
     }
 
     @Test
     public void testRemoveLastTreeNode() throws Exception {
         assertEquals("{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes\"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}",
-                new Forest(TreeFixture.html).removeLastTreeNode().toString());
+                new Forest(TreeFixture.html).removeRightmostRoot().toString());
     }
 
     @Test
     public void testRemoveLastTreeNodeForEmptyForest() throws Exception {
-        assertTrue(new Forest().removeLastTreeNode().empty());
+        assertTrue(new Forest().removeRightmostRoot().empty());
     }
 
     @Test
     public void testRemoveLastTreeNodeForSmallTree() throws Exception {
         Forest f = new Forest(new Tree(elem("h1")));
-        assertTrue(f.removeLastTreeNode().empty());
+        assertTrue(f.removeRightmostRoot().empty());
     }
 }
