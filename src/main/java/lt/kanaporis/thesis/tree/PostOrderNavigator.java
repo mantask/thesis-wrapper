@@ -1,15 +1,15 @@
 package lt.kanaporis.thesis.tree;
 
-import org.apache.commons.lang3.Validate;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostOrderNavigator {
 
     public static List<Tree> sort(Tree tree) {
-        Validate.notNull(tree);
         List<Tree> sorted = new ArrayList<>();
-        sort(tree, sorted);
+        if (tree != null) {
+            sort(tree, sorted);
+        }
         return sorted;
     }
 

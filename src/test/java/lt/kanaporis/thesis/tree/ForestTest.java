@@ -1,5 +1,6 @@
 package lt.kanaporis.thesis.tree;
 
+import lt.kanaporis.thesis.Fixture;
 import org.junit.Test;
 
 import static lt.kanaporis.thesis.tree.Node.elem;
@@ -10,7 +11,7 @@ public class ForestTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testImmutability() throws Exception {
-        new Forest(TreeFixture.html).trees().add(TreeFixture.html);
+        new Forest(Fixture.origHtml).trees().add(Fixture.origHtml);
     }
 
     @Test
@@ -44,7 +45,7 @@ public class ForestTest {
     @Test
     public void testRemoveLastTreeNode() throws Exception {
         assertEquals("{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes\"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}",
-                new Forest(TreeFixture.html).removeRightmostRoot().toString());
+                new Forest(Fixture.origHtml).removeRightmostRoot().toString());
     }
 
     @Test
@@ -56,5 +57,11 @@ public class ForestTest {
     public void testRemoveLastTreeNodeForSmallTree() throws Exception {
         Forest f = new Forest(new Tree(elem("h1")));
         assertTrue(f.removeRightmostRoot().empty());
+    }
+
+    @Test
+    public void testNullTreeForest() throws Exception {
+        Tree tree = null;
+        assertEquals("", new Forest(tree).toString());
     }
 }

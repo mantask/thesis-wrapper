@@ -1,5 +1,6 @@
 package lt.kanaporis.thesis.tree;
 
+import lt.kanaporis.thesis.Fixture;
 import org.junit.Test;
 
 import java.util.List;
@@ -10,7 +11,7 @@ public class PostOrderNavigatorTest {
 
     @Test
     public void testSortForNonEmpty() throws Exception {
-        List<Tree> nodes = PostOrderNavigator.sort(TreeFixture.html);
+        List<Tree> nodes = PostOrderNavigator.sort(Fixture.origHtml);
         assertEquals(10, nodes.size());
         assertEquals("head", nodes.get(0).root().label());
         assertEquals("TEXT", nodes.get(1).root().label());
@@ -22,5 +23,10 @@ public class PostOrderNavigatorTest {
         assertEquals("p", nodes.get(7).root().label());
         assertEquals("body", nodes.get(8).root().label());
         assertEquals("html", nodes.get(9).root().label());
+    }
+
+    @Test
+    public void testSortNullTree() throws Exception {
+        assertTrue(PostOrderNavigator.sort(null).isEmpty());
     }
 }

@@ -79,7 +79,7 @@ public class ProbabilisticChangeModelTest {
     public void testValidateSuccess() throws Exception {
         ProbabilisticChangeModel model = new ProbabilisticChangeModel();
 
-        model.stopProb(0.25);
+        model.stopProb(0.15);
 
         model.insProb("a", 0.33);
         model.insProb("p", 0.33);
@@ -93,20 +93,17 @@ public class ProbabilisticChangeModelTest {
 
         assertFalse(model.valid());
 
-        model.subProb("a", "p", 0.2);
+        model.subProb("a", "p", 0.05);
         model.subProb("a", "h1", 0.1);
-        model.subProb("a", "a", 0.1);
 
         model.subProb("p", "h1", 0.2);
         model.subProb("p", "a", 0.1);
-        model.subProb("p", "p", 0.1);
 
         model.subProb("h1", "p", 0.05);
-        model.subProb("h1", "h1", 0.05);
 
         assertFalse(model.valid());
 
-        model.subProb("h1", "a", 0.1);
+        model.subProb("h1", "a", 0.05);
 
         assertTrue(model.valid());
     }

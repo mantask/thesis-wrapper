@@ -55,6 +55,29 @@ public class Node {
         }
     }
 
+    @Override
+    public boolean equals(Object that) {
+        return (that instanceof Node) && this.equals((Node) that);
+    }
+
+    public  boolean equals(Node that) {
+        return (this == that) ||
+                (that != null) &&
+                (this.type == that.type) &&
+                (this.label == null && that.label == null || this.label.equals(that.label)) &&
+                (this.value == null && that.value == null || this.value.equals(that.value));
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type.hashCode();
+        result = 31 * result + label.hashCode();
+        result = 31 * result + value.hashCode();
+        return result;
+    }
+
+    // ------------------------------------------------------
+
     /**
      ELEMENT_NODE
      ATTRIBUTE_NODE

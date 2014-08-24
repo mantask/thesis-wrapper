@@ -7,6 +7,7 @@ import lt.kanaporis.thesis.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProbabilisticTransducer {
 
@@ -79,22 +80,34 @@ public class ProbabilisticTransducer {
     /**
      * Convenience method
      */
+    public double prob(Tree origTree, Tree transTree, TransformationProbabilities probs) {
+        return prob(new Forest(origTree), new Forest(transTree), probs);
+    }
+
     public double prob(Tree origTree, Tree transTree) {
-        return prob(new Forest(origTree), new Forest(transTree));
+        return prob(origTree, transTree, null);
     }
 
     /**
      * Convenience method
      */
+    public double prob(Tree origTree, Forest transForest, TransformationProbabilities probs) {
+        return prob(new Forest(origTree), transForest, probs);
+    }
+
     public double prob(Tree origTree, Forest transForest) {
-        return prob(new Forest(origTree), transForest);
+        return prob(origTree, transForest, null);
     }
 
     /**
      * Convenience method
      */
+    public double prob(Forest origForest, Tree transTree, TransformationProbabilities probs) {
+        return prob(origForest, new Forest(transTree), probs);
+    }
+
     public double prob(Forest origForest, Tree transTree) {
-        return prob(origForest, new Forest(transTree));
+        return prob(origForest, transTree, null);
     }
 
     /**
@@ -111,7 +124,7 @@ public class ProbabilisticTransducer {
      * @param transForest Transformed tree.
      * @return Probability of transforming original tree into transformed one. Result in the range of [0..1].
      */
-    public double prob(Forest origForest, Forest transForest) {
+    public double prob(Forest origForest, Forest transForest, TransformationProbabilities probs) {
 
         if (transForest.empty()) {
             return probWhenAllNodesWereDel(origForest);
@@ -129,8 +142,19 @@ public class ProbabilisticTransducer {
         // TODO add Special Forest Optimization by Zhang and Shasha [edit dist trees]
         // TODO record Prob2[origForest][transForest] when origForest.isTree() & transForest.isTree() for ProbabilisticWrapper
         // TODO somehow record Prob1[origForest][transForest], ie how do we tell by the forest the prefix?
-        return probWhenLastTreeRootWasSub(origForest, transForest) +
+        double prob = probWhenLastTreeRootWasSub(origForest, transForest) +
                 probWhenLastTreeRootWasIns(origForest, transForest);
+
+        // record probabilities
+        if (probs != null) {
+            probs.put(origForest.toString(), transForest.toString(), prob);
+        }
+
+        return prob;
+    }
+
+    public double prob(Forest origForest, Forest transForest) {
+        return prob(origForest, transForest, null);
     }
 
     /**
@@ -203,4 +227,9 @@ public class ProbabilisticTransducer {
                 prob(origForest.rightmostTree().subforest(), transForest.rightmostTree().subforest());
     }
 
+    // ------------------------------------------------------------------------
+
+    public ProbabilisticChangeModel getChangeModel() {
+        return changeModel;
+    }
 }

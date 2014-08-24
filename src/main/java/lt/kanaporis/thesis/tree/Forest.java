@@ -1,6 +1,13 @@
 package lt.kanaporis.thesis.tree;
 
-import java.util.*;
+import com.google.common.base.Predicates;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Immutable forest of ordered rooted trees.
@@ -14,11 +21,15 @@ public class Forest {
     // ---- ctor ---------------------------------
 
     public Forest(Tree... trees) {
-        this.trees = Collections.unmodifiableList(Arrays.asList(trees));
+        this(Arrays.asList(trees));
     }
 
     public Forest(List<Tree> trees) {
-        this.trees = Collections.unmodifiableList(trees);
+        if (trees == null) {
+            this.trees = Collections.EMPTY_LIST;
+        } else {
+            this.trees = ImmutableList.copyOf(Iterables.filter(trees, Predicates.notNull()));
+        }
     }
 
     // --------------------------------------------

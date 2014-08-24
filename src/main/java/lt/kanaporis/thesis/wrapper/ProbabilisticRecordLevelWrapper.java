@@ -1,22 +1,23 @@
 package lt.kanaporis.thesis.wrapper;
 
+import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProbabilisticRecordWrapper {
+public class ProbabilisticRecordLevelWrapper {
 
-    private final ProbabilisticPageWrapper boundaryWrapper;
-    private final ProbabilisticPageWrapper regionWrapper;
+    private final ProbabilisticPageLevelWrapper boundaryWrapper;
+    private final ProbabilisticPageLevelWrapper regionWrapper;
 
-    public ProbabilisticRecordWrapper(Tree tree, Node distNode) {
-        Tree boundary = locateBoundary(tree, distNode);
+    public ProbabilisticRecordLevelWrapper(Tree tree, Tree distNode, ProbabilisticChangeModel changeModel) {
+        Tree boundary = locateBoundary(tree, distNode.root());
         List<Tree> regions = DataRegionLocator.locate(boundary);
-        Tree region = locateRegionWithDistNode(regions, distNode);
-        boundaryWrapper = new ProbabilisticPageWrapper(tree, boundary.root());
-        regionWrapper = new ProbabilisticPageWrapper(region, distNode);
+        Tree region = locateRegionWithDistNode(regions, distNode.root());
+        boundaryWrapper = new ProbabilisticPageLevelWrapper(tree, boundary, changeModel);
+        regionWrapper = new ProbabilisticPageLevelWrapper(region, distNode, changeModel);
     }
 
     public List<Node> wrap(Tree tree) {

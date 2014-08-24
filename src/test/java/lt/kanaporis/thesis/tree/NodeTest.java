@@ -32,4 +32,15 @@ public class NodeTest {
         assertEquals("", Node.attr("Style", "color: red;").text());
         assertEquals("Hello, World!", Node.text("Hello, World!").text());
     }
+
+    @Test
+    public void testEquals() throws Exception {
+        assertEquals(Node.elem("h1"), Node.elem("h1"));
+        assertEquals(Node.attr("style", "color: red;"), Node.attr("style", "color: red;"));
+        assertEquals(Node.text("Hello, World!"), Node.text("Hello, World!"));
+        assertNotEquals(Node.elem("h1"), Node.attr("style", "color: red;"));
+        assertNotEquals(Node.elem("h1"), Node.elem("h2"));
+        assertNotEquals(Node.text("Hello, World!"), Node.text("Hello, John!"));
+        assertNotEquals(Node.attr("style", "color: red;"), Node.attr("style", "color: blue;"));
+    }
 }

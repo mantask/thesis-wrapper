@@ -2,8 +2,10 @@ package lt.kanaporis.thesis.changemodel;
 
 final class NumberUtils {
 
+    public static final double THRESHOLD = 1E-6;
+
     public static boolean eq(double a, double b) {
-        return Math.abs(a - b) < 1E-6;
+        return Math.abs(a - b) < THRESHOLD;
     }
 
     public static boolean lt(double a, double b) {
@@ -11,7 +13,7 @@ final class NumberUtils {
     }
 
     public static boolean gt(double a, double b) {
-        return a - b > 1E-6;
+        return a - b > THRESHOLD;
     }
 
     public static boolean le(double a, double b) {

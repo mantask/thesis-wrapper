@@ -1,8 +1,8 @@
-unit test ProbabilisticPageWrapper
-unit test DataRegionLocator
-unit test ProbabilisticRecordWrapper
+implement and unit test DataRegionLocator
+implement and unit test ProbabilisticRecordWrapper
+
+implement ProbabilisticTransducer transformations (might be useful for setting up experiment)
 
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
-Implement terminating clauses for PT.prob().
-Test PT.prob() w/ Example 2 from p.339 on Dalvi'09
 Look for extension points w/ text patters in ProbPageWrapper
+

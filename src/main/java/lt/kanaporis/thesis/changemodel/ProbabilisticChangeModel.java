@@ -26,6 +26,9 @@ public class ProbabilisticChangeModel {
     // --- Getters ------------------------------------------
 
     public double subProb(String label1, String label2) {
+        if (label1.equals(label2)) {
+            return stopProb();
+        }
         Double probability = subProbs.get(subKey(label1, label2));
         return probability != null ? probability : 0.0;
     }

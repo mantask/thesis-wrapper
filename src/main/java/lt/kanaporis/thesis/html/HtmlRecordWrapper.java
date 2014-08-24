@@ -1,8 +1,9 @@
 package lt.kanaporis.thesis.html;
 
+import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
-import lt.kanaporis.thesis.wrapper.ProbabilisticRecordWrapper;
+import lt.kanaporis.thesis.wrapper.ProbabilisticRecordLevelWrapper;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
@@ -13,7 +14,8 @@ import java.util.List;
 
 public class HtmlRecordWrapper {
 
-    private final ProbabilisticRecordWrapper wrapper;
+    private final ProbabilisticRecordLevelWrapper wrapper;
+    private final ProbabilisticChangeModel probModel = new ProbabilisticChangeModel(); // FIXME init
 
     public HtmlRecordWrapper(String html, String selector) {
         Document dom = Jsoup.parse(html);
@@ -22,8 +24,8 @@ public class HtmlRecordWrapper {
         if (distinquishedElems.size() != 1) {
             throw new IllegalStateException("Selector cannot locate a unique distinquished node.");
         }
-        Node distinquishedNode = locate(dom, tree, distinquishedElems);
-        wrapper = new ProbabilisticRecordWrapper(tree, distinquishedNode);
+        Tree distinquishedNode = locate(dom, tree, distinquishedElems);
+        wrapper = new ProbabilisticRecordLevelWrapper(tree, distinquishedNode, probModel);
     }
 
     public List<String> wrap(String html) {
@@ -41,7 +43,7 @@ public class HtmlRecordWrapper {
         return nodesStr;
     }
 
-    private Node locate(Document dom, Tree origTree, Elements distinquishedElems) {
+    private Tree locate(Document dom, Tree origTree, Elements distinquishedElems) {
         // TODO
         return null;
     }
