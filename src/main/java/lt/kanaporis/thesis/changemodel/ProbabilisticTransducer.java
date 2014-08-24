@@ -1,5 +1,6 @@
 package lt.kanaporis.thesis.changemodel;
 
+import lt.kanaporis.thesis.Config;
 import lt.kanaporis.thesis.tree.Forest;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.PostOrderNavigator;
@@ -130,14 +131,11 @@ public class ProbabilisticTransducer {
             return probWhenAllNodesWereDel(origForest);
         }
 
-        /*
-        // TODO add Optimizations for similar trees (ref §4.1.1 Dalvi'09)
-        if (origForest.trees().size() == 1 && transForest.trees().size() == 1 &&
-                // origForest.tree(0).substantiallyDifferentFrom(transForest.tree(0))
-                Math.abs(origForest.tree(0).nodeCount() - transForest.tree(0).nodeCount()) < SUBSTANTIAL_DIFFERENCE_THRESHOLD) {
-            return 0;
+        if (Config.ENABLE_OPTIMIZATION_FOR_SIMILAR_TREES &&
+                origForest.trees().size() == 1 && transForest.trees().size() == 1 &&
+                origForest.tree(0).substantiallyDifferentFrom(transForest.tree(0))) {
+            return 0.0;
         }
-         */
 
         // TODO add Special Forest Optimization by Zhang and Shasha [edit dist trees]
         // TODO record Prob2[origForest][transForest] when origForest.isTree() & transForest.isTree() for ProbabilisticWrapper

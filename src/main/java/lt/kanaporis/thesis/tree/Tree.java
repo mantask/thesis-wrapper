@@ -1,5 +1,6 @@
 package lt.kanaporis.thesis.tree;
 
+import lt.kanaporis.thesis.Config;
 import org.apache.commons.lang3.Validate;
 
 import java.util.*;
@@ -8,16 +9,26 @@ public class Tree {
 
     private final Node root;
     private final List<Tree> children;
+    private final int nodeCount;
 
     public Tree(Node root, Tree... children) {
         Validate.notNull(root);
         this.root = root;
+        this.nodeCount = countAllNodes(children);
         if (children.length > 0) {
             Validate.isTrue(root.type() == Node.NodeType.ELEMENT);
             this.children = Collections.unmodifiableList(Arrays.asList(children));
         } else {
             this.children = Collections.EMPTY_LIST;
         }
+    }
+
+    private int countAllNodes(Tree... children) {
+        int nodeCount = 1;
+        for (Tree child : children) {
+            nodeCount += child.nodeCount();
+        }
+        return nodeCount;
     }
 
     public Tree(Node root, Collection<Tree> children) {
@@ -112,6 +123,20 @@ public class Tree {
 
     public Forest subforest() {
         return new Forest(children.toArray(new Tree[] {}));
+    }
+
+    public int nodeCount() {
+        return nodeCount;
+    }
+
+    /**
+     * Heuristics for determining, if two trees are very different
+     */
+    public boolean substantiallyDifferentFrom(Tree that) {
+        // TODO experiment with threshold
+        double diff = Math.abs(this.nodeCount() - that.nodeCount());
+        double max = Math.max(this.nodeCount(), that.nodeCount());
+        return (diff / max) > Config.MAX_ALLOWED_TREE_DIFFERENCE;
     }
 
     // --- Object ---------------------------------------------

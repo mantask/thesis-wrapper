@@ -153,4 +153,21 @@ public class TreeTest {
                                 new Tree(text("!"))))));
 
     }
+
+    @Test
+    public void testNodeCount() throws Exception {
+        assertEquals(1, new Tree(elem("h1")).nodeCount());
+        assertEquals(5, new Tree(elem("body"),
+            new Tree(elem("h1")),
+            new Tree(elem("h2")),
+            new Tree(elem("h3")),
+            new Tree(elem("h4"))).nodeCount());
+        assertEquals(10, Fixture.origHtml.nodeCount());
+    }
+
+    @Test
+    public void testSubstantialDifference() throws Exception {
+        assertTrue(Fixture.origHtml.substantiallyDifferentFrom(new Tree(elem("h1"))));
+        assertTrue(new Tree(elem("h1")).substantiallyDifferentFrom(Fixture.origHtml));
+    }
 }
