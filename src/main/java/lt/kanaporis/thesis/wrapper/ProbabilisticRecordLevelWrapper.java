@@ -1,6 +1,7 @@
 package lt.kanaporis.thesis.wrapper;
 
 import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
+import lt.kanaporis.thesis.region.DataRegionLocator;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 

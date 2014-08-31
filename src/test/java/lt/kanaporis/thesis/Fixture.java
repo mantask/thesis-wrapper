@@ -20,6 +20,15 @@ public class Fixture {
                         new Tree(text("here"))),
                     new Tree(text("!")))));
 
+    public static final Tree tableHtml = new Tree(elem("table"),
+            new Tree(elem("tr"),
+                    new Tree(elem("td"), new Tree(text("1"))),
+                    new Tree(elem("td"), new Tree(text("2"))),
+                    new Tree(elem("td"), new Tree(text("3"))),
+                    new Tree(elem("td"), new Tree(text("4"))),
+                    new Tree(elem("td"), new Tree(text("5"))),
+                    new Tree(elem("td"), new Tree(text("6")))));
+
     public static final ProbabilisticChangeModel abcChangeModel = new ProbabilisticChangeModel();
     static {
         abcChangeModel.stopProb(0.15);

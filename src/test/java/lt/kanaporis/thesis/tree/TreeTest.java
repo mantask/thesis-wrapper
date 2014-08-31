@@ -170,4 +170,26 @@ public class TreeTest {
         assertTrue(Fixture.origHtml.substantiallyDifferentFrom(new Tree(elem("h1"))));
         assertTrue(new Tree(elem("h1")).substantiallyDifferentFrom(Fixture.origHtml));
     }
+
+    @Test
+    public void testSubtree() throws Exception {
+        Tree body = new Tree(elem("body"),
+                new Tree(elem("h1")),
+                new Tree(elem("h2")),
+                new Tree(elem("h3")),
+                new Tree(elem("h4")));
+        assertEquals("{body{h1}{h2}{h3}{h4}}", body.subtree(0, 4).toString());
+        assertEquals("{body}", body.subtree(0, 0).toString());
+        assertEquals("{body{h1}}", body.subtree(0, 1).toString());
+        assertEquals("{body{h4}}", body.subtree(3, 4).toString());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testSubtreeOutOfRange() throws Exception {
+        new Tree(elem("body"),
+                new Tree(elem("h1")),
+                new Tree(elem("h2")),
+                new Tree(elem("h3")),
+                new Tree(elem("h4"))).subtree(4, 5);
+    }
 }

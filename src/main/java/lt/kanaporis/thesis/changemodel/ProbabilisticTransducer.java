@@ -131,9 +131,7 @@ public class ProbabilisticTransducer {
             return probWhenAllNodesWereDel(origForest);
         }
 
-        if (Config.ENABLE_OPTIMIZATION_FOR_SIMILAR_TREES &&
-                origForest.trees().size() == 1 && transForest.trees().size() == 1 &&
-                origForest.tree(0).substantiallyDifferentFrom(transForest.tree(0))) {
+        if (substantiallyDifferent(origForest, transForest)) {
             return 0.0;
         }
 
@@ -149,6 +147,15 @@ public class ProbabilisticTransducer {
         }
 
         return prob;
+    }
+
+    /**
+     * Checks if optimization for similar trees can be applied.
+     */
+    private boolean substantiallyDifferent(Forest origForest, Forest transForest) {
+        return Config.ENABLE_OPTIMIZATION_FOR_SIMILAR_TREES &&
+                origForest.trees().size() == 1 && transForest.trees().size() == 1 &&
+                origForest.tree(0).substantiallyDifferentFrom(transForest.tree(0));
     }
 
     public double prob(Forest origForest, Forest transForest) {

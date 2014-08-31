@@ -8,9 +8,20 @@ public final class Config {
     public static final boolean ENABLE_OPTIMIZATION_FOR_SIMILAR_TREES = true;
 
     /**
-     * Max allowed tree difference (in percentage) between node count.
+     * Max allowed tree difference (in percentage) between node count for significant difference.
      */
     public static final double MAX_ALLOWED_TREE_DIFFERENCE = 2.0 / 3;
+
+    /**
+     * Maximum number of tag nodes that a generalized node can have.
+     */
+    public static final int MAX_NUMBER_OF_TAGS_PER_GENERALIZED_NODE = 3;
+
+    /**
+     * Edit distance threshold is needed to decide whether two strings are similar.
+     * A set of training pages is used to decide it.
+     */
+    public static final double EDIT_DISTANCE_THRESHOLD = 999;
 
     // TODO public static final boolean ENABLE_CONTENT_MODEL = false;
 

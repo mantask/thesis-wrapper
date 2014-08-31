@@ -139,6 +139,16 @@ public class Tree {
         return (diff / max) > Config.MAX_ALLOWED_TREE_DIFFERENCE;
     }
 
+    /**
+     * Builds a subtree with the same root and children from index FROM to THRU
+     * @param from First element index (inclusive)
+     * @param thru Last element index (non-inclusive)
+     */
+    public Tree subtree(int from, int thru) {
+        Validate.isTrue((0 <= from) && (from <= thru) && (thru <= children.size()));
+        return new Tree(root, children.subList(from, thru));
+    }
+
     // --- Object ---------------------------------------------
 
     @Override
