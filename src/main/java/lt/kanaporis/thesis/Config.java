@@ -20,8 +20,9 @@ public final class Config {
     /**
      * Edit distance threshold is needed to decide whether two strings are similar.
      * A set of training pages is used to decide it.
+     * TODO should take into consideration the probabilistic model
      */
-    public static final double EDIT_DISTANCE_THRESHOLD = 999;
+    public static final double EDIT_DISTANCE_THRESHOLD = 2;
 
     // TODO public static final boolean ENABLE_CONTENT_MODEL = false;
 
