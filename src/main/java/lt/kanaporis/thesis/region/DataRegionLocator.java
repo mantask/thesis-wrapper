@@ -17,7 +17,7 @@ public class DataRegionLocator {
      */
     public static List<Tree> locate(Tree boundary) {
         DiffsToNextGeneralizedNode dist = childCombinations(boundary);
-        Set<DataRegion> regions = dataRegions(1, boundary, dist);
+        Set<DataRegion> regions = dataRegions(0, boundary, dist);
         return mapTrees(boundary, regions);
     }
 
@@ -27,7 +27,9 @@ public class DataRegionLocator {
     private static List<Tree> mapTrees(Tree boundary, Set<DataRegion> regions) {
         List<Tree> trees = new ArrayList<>();
         for (DataRegion region : regions) {
-            trees.add(boundary.subtree(region.startPosition(), region.lastPosition() + 1));
+            for (int i = region.startPosition(); i <= region.lastPosition(); i += region.tagNodesPerGenNode()) {
+                trees.add(boundary.subtree(i, i + region.tagNodesPerGenNode()));
+            }
         }
         return trees;
     }
@@ -62,13 +64,13 @@ public class DataRegionLocator {
 
     private static DataRegion maxDataRegionFrom(int genNodeStart, int genNodeLength, Tree boundary, DiffsToNextGeneralizedNode dist) {
         DataRegion currDR = DataRegion.EMPTY;
-        for (int nextGenNodeStart = genNodeStart;
-             nextGenNodeStart < boundary.children().size();
+        for (int nextGenNodeStart = genNodeStart + genNodeLength;
+             nextGenNodeStart + genNodeLength <= boundary.children().size();
              nextGenNodeStart += genNodeLength) {
-            if (dist.from(nextGenNodeStart, genNodeLength) <= Config.EDIT_DISTANCE_THRESHOLD) {
+            if (dist.from(nextGenNodeStart - genNodeLength, genNodeLength) <= Config.EDIT_DISTANCE_THRESHOLD) {
                 if (currDR.empty()) {
                     // data region of two gen. nodes
-                    currDR = new DataRegion(genNodeLength, nextGenNodeStart, 2 * genNodeLength);
+                    currDR = new DataRegion(genNodeLength, nextGenNodeStart - genNodeLength, 2 * genNodeLength);
                 } else {
                     currDR = currDR.expandByOne();
                 }

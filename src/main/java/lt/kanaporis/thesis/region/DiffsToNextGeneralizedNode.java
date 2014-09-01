@@ -13,11 +13,11 @@ public class DiffsToNextGeneralizedNode {
     }
 
     public double from(int pos, int len) {
-        return editDistances[pos][len];
+        return editDistances[pos][len - 1];
     }
 
     public void from(int pos, int len, double dist) {
-        editDistances[pos][len] = dist;
+        editDistances[pos][len - 1] = dist;
     }
 
 }

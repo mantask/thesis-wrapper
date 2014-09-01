@@ -15,7 +15,7 @@ public class DataRegionLocatorTest {
         List<Tree> regionTrees = DataRegionLocator.locate(Fixture.tableHtml.child(0));
         assertEquals(6, regionTrees.size());
         for (int i = 0; i < 6; i++) {
-            assertEquals("{tr{td{TEXT=\"" + i + "\"}}}", regionTrees.get(i).toString());
+            assertEquals("{tr{td{TEXT=\"" + (i + 1)g + "\"}}}", regionTrees.get(i).toString());
         }
     }
 }
