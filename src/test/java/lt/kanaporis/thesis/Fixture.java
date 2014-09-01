@@ -1,6 +1,7 @@
 package lt.kanaporis.thesis;
 
 import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
+import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 import org.apache.commons.lang3.Validate;
 
@@ -28,6 +29,28 @@ public class Fixture {
                     new Tree(elem("td"), new Tree(text("4"))),
                     new Tree(elem("td"), new Tree(text("5"))),
                     new Tree(elem("td"), new Tree(text("6")))));
+
+    public static final Tree movieHtml = new Tree(Node.elem("tr"),
+            new Tree(Node.elem("th"),
+                    new Tree(Node.text("Title of the movie"))),
+            new Tree(Node.elem("td"),
+                    new Tree(Node.elem("strong"),
+                            new Tree(Node.text("1. Guardians of the Galaxy (2014)"))),
+                    new Tree(Node.elem("br")),
+                    new Tree(Node.text("Weekend: $16.3M"))),
+            new Tree(Node.elem("td"),
+                    new Tree(Node.elem("strong"),
+                            new Tree(Node.text("2. Teenage Mutant Ninja Turtles (2014)"))),
+                    new Tree(Node.elem("br")),
+                    new Tree(Node.text("Weekend: $11.8M"))),
+            new Tree(Node.elem("td"),
+                    new Tree(Node.elem("strong"),
+                            new Tree(Node.text("3. If I Stay (2014)"))),
+                    new Tree(Node.elem("br")),
+                    new Tree(Node.text("Weekend: $9.3M"))),
+            new Tree(Node.elem("td"),
+                    new Tree(Node.elem("a"),
+                            new Tree(Node.text("See more box office results at BoxOfficeMojo.com")))));
 
     public static final ProbabilisticChangeModel abcChangeModel = new ProbabilisticChangeModel();
     static {

@@ -115,7 +115,7 @@ public class DataRegionLocator {
                     Tree nextGenNode = boundary.subtree(nextGenNodeStart, nextGenNodeStart + genNodeLength);
                     String mappedNextGenNode = RtedMapper.map(nextGenNode);
 
-                    // TODO could compare String edit-dist instead
+                    // TODO could compare String edit-dist instead. add a Config switch for this.
                     // TODO how about probabilistic change model and edit distance?
                     double editDist = !currGenNode.substantiallyDifferentFrom(nextGenNode)
                             ? RTED.computeDistance(mappedCurrGenNode, mappedNextGenNode) : 0.0;

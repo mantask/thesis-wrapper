@@ -1,10 +1,8 @@
-implement and unit test DataRegionLocator
-- abstract (double[][]) editDists
-- FindDRs
-- IdentDRs
-- UnCoveredDRs
+Implement record-level wrapper
+Implement HtmlRecordWrapper
+Implement HtmlTreeFactory
+Implement ProbabilisticChangeModelFactory
 
-implement and unit test ProbabilisticRecordWrapper
 implement ProbabilisticTransducer transformations (might be useful for setting up experiment)
 Look for extension points w/ text patters in ProbPageWrapper
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion

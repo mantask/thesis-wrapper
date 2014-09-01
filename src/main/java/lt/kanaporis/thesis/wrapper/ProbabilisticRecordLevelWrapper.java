@@ -34,6 +34,7 @@ public class ProbabilisticRecordLevelWrapper {
     private Tree locateRegionWithDistNode(List<Tree> regions, Node node) {
         for (Tree region : regions) {
             if (region.contains(node)) {
+                // TODO might build a generalized region, see Broom Extraction in [Zheng'09]
                 return region;
             }
         }
