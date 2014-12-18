@@ -193,8 +193,4 @@ public class TreeTest {
                 new Tree(elem("h4"))).subtree(4, 5);
     }
 
-    @Test
-    public void testMergeNullGivesTheSameTree() throws Exception {
-        assertEquals(Fixture.origHtml, Fixture.origHtml.merge(null));
-    }
 }

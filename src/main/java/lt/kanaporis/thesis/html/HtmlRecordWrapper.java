@@ -10,6 +10,7 @@ import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 // TODO work work work!
 public class HtmlRecordWrapper {
@@ -31,11 +32,11 @@ public class HtmlRecordWrapper {
     public List<String> wrap(String html) {
         Document dom = Jsoup.parse(html);
         Tree tree = HtmlTreeFactory.buildFromDom(dom);
-        List<Node> nodes = wrapper.wrap(tree);
+        Set<Node> nodes = wrapper.wrap(tree);
         return toString(nodes);
     }
 
-    public List<String> toString(List<Node> nodes) {
+    public List<String> toString(Set<Node> nodes) {
         List<String> nodesStr = new ArrayList<>();
         for (Node node : nodes) {
             nodesStr.add(node.text());

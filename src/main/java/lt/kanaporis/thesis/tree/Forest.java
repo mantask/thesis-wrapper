@@ -104,6 +104,14 @@ public class Forest {
         return false;
     }
 
+    /**
+     * Generalizes two forests into one.
+     */
+    public Forest merge(Forest that) {
+        // TODO implement
+        return null;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();

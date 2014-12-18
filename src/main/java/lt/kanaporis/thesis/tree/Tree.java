@@ -136,14 +136,6 @@ public class Tree {
         return new Tree(root, children.subList(from, thru));
     }
 
-    /**
-     * Generalizes two trees into one.
-     */
-    public Tree merge(Tree that) {
-        // TODO implement
-        return null;
-    }
-
     public boolean contains(Node node) {
         if (root == node) {
             return true;
