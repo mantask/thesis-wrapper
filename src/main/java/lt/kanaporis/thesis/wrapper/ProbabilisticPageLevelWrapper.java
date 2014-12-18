@@ -4,11 +4,8 @@ import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
 import lt.kanaporis.thesis.changemodel.ProbabilisticTransducer;
 import lt.kanaporis.thesis.changemodel.TransformationProbabilities;
 import lt.kanaporis.thesis.tree.Forest;
-import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.PostOrderNavigator;
 import lt.kanaporis.thesis.tree.Tree;
-
-import java.util.Map;
 
 /**
  * Probabilistic page-level wrapper based on [Parameswaran'11].

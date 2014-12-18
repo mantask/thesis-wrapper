@@ -6,7 +6,7 @@ public class Node {
     private final String label;
     private final String value;
 
-    // --- ctor --------------------------------------------
+    // --- factory methods ---------------------------------
 
     public static Node text(String value) {
         return new Node(NodeType.TEXT, "TEXT", value);
@@ -19,6 +19,8 @@ public class Node {
     public static Node elem(String label) {
         return new Node(NodeType.ELEMENT, label, null);
     }
+
+    // --- ctor --------------------------------------------
 
     private Node(NodeType type, String label, String value) {
         this.type = type;
@@ -97,5 +99,4 @@ public class Node {
         ATTRIBUTE,
         TEXT,
     }
-
 }

@@ -6,6 +6,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.TextNode;
 
+/**
+ * Builds internal tree structure from given HTML.
+ */
 public class HtmlTreeFactory {
 
     public static Tree buildFromDom(Document dom) {
@@ -21,7 +24,7 @@ public class HtmlTreeFactory {
             // TODO
             /*
             List<Node>
-            for (org.jsoup.nodes.Node childElem : elem.childNodes()) {
+            for (org.jsoup.nodes.Node childElem : elem.childTagNodes()) {
                 Node childNode = walk(childElem);
                 if (childNode != null) {
                     node.addChild(childNode);

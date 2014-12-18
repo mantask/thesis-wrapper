@@ -11,6 +11,8 @@ public class Tree {
     private final List<Tree> children;
     private final int nodeCount;
 
+    // --- ctor ---------------------------------------------
+
     public Tree(Node root, Tree... children) {
         Validate.notNull(root);
         this.root = root;
@@ -38,6 +40,8 @@ public class Tree {
     public Tree(Node root, Forest forest) {
         this(root, forest.trees());
     }
+
+    // --- getters --------------------------------------------
 
     public Node root() {
         return root;
@@ -109,6 +113,37 @@ public class Tree {
         throw new RuntimeException("Distinquished node not found!");
     }
 
+    public Forest subforest() {
+        return new Forest(children.toArray(new Tree[] {}));
+    }
+
+    public Forest subforest(int from, int thru) {
+        Validate.isTrue((0 <= from) && (from <= thru) && (thru <= children.size()));
+        return new Forest(children.subList(from, thru));
+    }
+
+    public int nodeCount() {
+        return nodeCount;
+    }
+
+    /**
+     * Builds a subtree with the same root and children from index FROM to THRU
+     * @param from First element index (inclusive)
+     * @param thru Last element index (non-inclusive)
+     */
+    public Tree subtree(int from, int thru) {
+        Validate.isTrue((0 <= from) && (from <= thru) && (thru <= children.size()));
+        return new Tree(root, children.subList(from, thru));
+    }
+
+    /**
+     * Generalizes two trees into one.
+     */
+    public Tree merge(Tree that) {
+        // TODO implement
+        return null;
+    }
+
     public boolean contains(Node node) {
         if (root == node) {
             return true;
@@ -121,14 +156,6 @@ public class Tree {
         return false;
     }
 
-    public Forest subforest() {
-        return new Forest(children.toArray(new Tree[] {}));
-    }
-
-    public int nodeCount() {
-        return nodeCount;
-    }
-
     /**
      * Heuristics for determining, if two trees are very different
      */
@@ -137,16 +164,6 @@ public class Tree {
         double diff = Math.abs(this.nodeCount() - that.nodeCount());
         double max = Math.max(this.nodeCount(), that.nodeCount());
         return (diff / max) > Config.MAX_ALLOWED_TREE_DIFFERENCE;
-    }
-
-    /**
-     * Builds a subtree with the same root and children from index FROM to THRU
-     * @param from First element index (inclusive)
-     * @param thru Last element index (non-inclusive)
-     */
-    public Tree subtree(int from, int thru) {
-        Validate.isTrue((0 <= from) && (from <= thru) && (thru <= children.size()));
-        return new Tree(root, children.subList(from, thru));
     }
 
     // --- Object ---------------------------------------------

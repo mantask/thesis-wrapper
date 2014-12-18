@@ -3,6 +3,9 @@ package lt.kanaporis.thesis.html;
 import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
 import org.apache.commons.lang3.Validate;
 
+/**
+ * Reads probabilistic change model from a file
+ */
 public class ProbabilisticChangeModelFactory {
 
     /**

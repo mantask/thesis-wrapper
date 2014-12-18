@@ -53,6 +53,14 @@ public class Forest {
         return new Forest(trees);
     }
 
+    public Forest add(Tree... trees) {
+        return add(Arrays.asList(trees));
+    }
+
+    public int size() {
+        return trees.size();
+    }
+
     public boolean empty() {
         return trees.size() == 0;
     }
@@ -83,6 +91,17 @@ public class Forest {
 
     private int lastTreeIndex() {
         return trees.size() - 1;
+    }
+
+    public boolean overlaps(Forest that) {
+        for (Tree thisTree : this.trees()) {
+            for (Tree thatTree : that.trees()) {
+                if (thisTree == thatTree) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     @Override

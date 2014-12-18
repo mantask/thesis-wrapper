@@ -154,7 +154,8 @@ public class ProbabilisticTransducer {
      */
     private boolean substantiallyDifferent(Forest origForest, Forest transForest) {
         return Config.ENABLE_OPTIMIZATION_FOR_SIMILAR_TREES &&
-                origForest.trees().size() == 1 && transForest.trees().size() == 1 &&
+                origForest.trees().size() == 1 &&
+                transForest.trees().size() == 1 &&
                 origForest.tree(0).substantiallyDifferentFrom(transForest.tree(0));
     }
 

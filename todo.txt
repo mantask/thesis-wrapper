@@ -1,4 +1,7 @@
-Implement record-level wrapper
+Implement record-level wrapper:
+- Cover implementation with unit tests. And also walk through code by hand.
+
+
 Implement HtmlRecordWrapper
 Implement HtmlTreeFactory
 Implement ProbabilisticChangeModelFactory
@@ -6,3 +9,13 @@ Implement ProbabilisticChangeModelFactory
 implement ProbabilisticTransducer transformations (might be useful for setting up experiment)
 Look for extension points w/ text patters in ProbPageWrapper
 http://confluence.jetbrains.com/display/IntelliJIDEA/Code+Completion
+
+Implement record-level wrapper:
+2) Implement merge operation on trees.
+   - Cover with tests. Refactor.
+
+
+Setup experiment
+Run experiment
+Write thesis
+- literature review
