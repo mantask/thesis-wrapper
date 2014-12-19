@@ -3,6 +3,7 @@ Implement record-level wrapper:
   - calcCombinations
   - findDataRegions
   - identifyDataRecords
+- TagNodes similar inside DataRecordLocator
 
 Implement HtmlRecordWrapper
 Implement HtmlTreeFactory

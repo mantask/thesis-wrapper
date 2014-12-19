@@ -9,7 +9,7 @@ public class TreeUtils {
             return false;
         }
         for (int i = 0; i < tree1.children().size(); i++) {
-            if (!tree1.child(i).equals(tree2.child(i))) {
+            if (!areEqual(tree1.child(i), tree2.child(i))) {
                 return false;
             }
         }

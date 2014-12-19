@@ -19,20 +19,19 @@ public class DataRecordLocator {
      * Locate data records inside the tree with distinquished node in it.
      */
     public static Set<DataRecord> locate(Tree tree) {
-        // TODO Node → Tree ?
-        Map<Node, DiffsToNextGeneralizedNode> diffs = calcCombinations(tree);
-        Map<Node, Set<DataRecord>> dataRegions = findDataRegions(tree, diffs);
+        Map<Tree, DiffsToNextGeneralizedNode> diffs = calcCombinations(tree);
+        Map<Tree, Set<DataRecord>> dataRegions = findDataRegions(tree, diffs);
         return identifyDataRecords(dataRegions.get(tree.root()));
     }
 
-    private static Map<Node, DiffsToNextGeneralizedNode> calcCombinations(Tree tree) {
-        Map<Node, DiffsToNextGeneralizedNode> diffs = new HashMap<>();
+    private static Map<Tree, DiffsToNextGeneralizedNode> calcCombinations(Tree tree) {
+        Map<Tree, DiffsToNextGeneralizedNode> diffs = new HashMap<>();
         calcRecursiveCombinations(tree, diffs);
         return diffs;
     }
 
-    private static void calcRecursiveCombinations(Tree boundary, Map<Node, DiffsToNextGeneralizedNode> diffs) {
-        diffs.put(boundary.root(), calcDirectChildCombinations(boundary));
+    private static void calcRecursiveCombinations(Tree boundary, Map<Tree, DiffsToNextGeneralizedNode> diffs) {
+        diffs.put(boundary, calcDirectChildCombinations(boundary));
         for (Tree child : boundary.children()) {
             calcRecursiveCombinations(child, diffs);
         }
@@ -116,19 +115,19 @@ public class DataRecordLocator {
     }
 */
 
-    private static Map<Node, Set<DataRecord>> findDataRegions(Tree tree, Map<Node, DiffsToNextGeneralizedNode> diffs) {
-        Map<Node, Set<DataRecord>> dataRegions = new HashMap<>();
+    private static Map<Tree, Set<DataRecord>> findDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs) {
+        Map<Tree, Set<DataRecord>> dataRegions = new HashMap<>();
         findRecursiveDataRegions(tree, diffs, dataRegions);
         return dataRegions;
     }
 
-    private static void findRecursiveDataRegions(Tree tree, Map<Node, DiffsToNextGeneralizedNode> diffs,
-            Map<Node, Set<DataRecord>> dataRegions) {
-        dataRegions.put(tree.root(), identifyDataRegions(0, tree, diffs.get(tree.root())));
+    private static void findRecursiveDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs,
+            Map<Tree, Set<DataRecord>> dataRegions) {
+        dataRegions.put(tree, identifyDataRegions(0, tree, diffs.get(tree)));
         Set<DataRecord> tempDataRecords = Collections.EMPTY_SET;
         for (Tree child : tree.children()) {
             findRecursiveDataRegions(child, diffs, dataRegions);
-            tempDataRecords.addAll(uncoveredDataRegions(dataRegions.get(tree.root()), child, dataRegions));
+            tempDataRecords.addAll(uncoveredDataRegions(dataRegions.get(tree), child, dataRegions));
         }
         dataRegions.get(tree.root()).addAll(tempDataRecords);
     }
@@ -184,7 +183,7 @@ public class DataRecordLocator {
      * Return DataRegions of a child that are not covered by any DR of a parent.
      */
     private static Set<DataRecord> uncoveredDataRegions(Set<DataRecord> parentDataRecords,
-            Tree child, Map<Node, Set<DataRecord>> dataRegions) {
+            Tree child, Map<Tree, Set<DataRecord>> dataRegions) {
         Set<DataRecord> diffDataRecords = new HashSet<>();
         for (DataRecord childDataRecord : dataRegions.get(child)) {
             if (!isCoveredBy(childDataRecord, parentDataRecords)) {
