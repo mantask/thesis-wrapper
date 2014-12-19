@@ -3,11 +3,13 @@ package lt.kanaporis.thesis.wrapper;
 import lt.kanaporis.thesis.Fixture;
 import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
+import lt.kanaporis.thesis.tree.TreeUtils;
 import org.junit.Test;
 
 import static lt.kanaporis.thesis.tree.Node.elem;
 import static lt.kanaporis.thesis.tree.Node.text;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ProbabilisticPageWrapperTest {
 
@@ -15,7 +17,7 @@ public class ProbabilisticPageWrapperTest {
     public void testNoChangeProb() throws Exception {
         Tree a = new Tree(Node.elem("a"));
         ProbabilisticPageLevelWrapper wrapper = new ProbabilisticPageLevelWrapper(a, a, Fixture.abcChangeModel);
-        assertEquals(a, wrapper.wrap(new Tree(Node.elem("a"))));
+        assertTrue(TreeUtils.areEqual(a, wrapper.wrap(new Tree(Node.elem("a")))));
     }
 
     @Test
@@ -23,7 +25,7 @@ public class ProbabilisticPageWrapperTest {
         Tree a = new Tree(Node.elem("a"));
         Tree ba = new Tree(Node.elem("b"), a);
         ProbabilisticPageLevelWrapper wrapper = new ProbabilisticPageLevelWrapper(a, a, Fixture.abcChangeModel);
-        assertEquals(a, wrapper.wrap(ba));
+        assertTrue(TreeUtils.areEqual(a, wrapper.wrap(ba)));
     }
 
     @Test
@@ -31,7 +33,7 @@ public class ProbabilisticPageWrapperTest {
         Tree a = new Tree(Node.elem("a"));
         Tree ba = new Tree(Node.elem("b"), a);
         ProbabilisticPageLevelWrapper wrapper = new ProbabilisticPageLevelWrapper(ba, a, Fixture.abcChangeModel);
-        assertEquals(a, wrapper.wrap(a));
+        assertTrue(TreeUtils.areEqual(a, wrapper.wrap(ba)));
     }
 
     @Test

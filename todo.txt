@@ -1,6 +1,8 @@
 Implement record-level wrapper:
 - Cover implementation with unit tests. And also walk through code by hand.
-
+  - calcCombinations
+  - findDataRegions
+  - identifyDataRecords
 
 Implement HtmlRecordWrapper
 Implement HtmlTreeFactory

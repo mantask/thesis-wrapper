@@ -170,30 +170,4 @@ public class Tree {
         sb.append('}');
         return sb.toString();
     }
-
-    @Override
-    public boolean equals(Object that) {
-        return (that instanceof Tree) && this.equals((Tree) that);
-    }
-
-    public boolean equals(Tree that) {
-        if (that == null ||
-                !this.root.equals(that.root) ||
-                this.children.size() != that.children.size()) {
-            return false;
-        }
-        for (int i = 0; i < children.size(); i++) {
-            if (!this.child(i).equals(that.child(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = root.hashCode();
-        result = 31 * result + children.hashCode();
-        return result;
-    }
 }

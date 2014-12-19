@@ -1,6 +1,7 @@
 package lt.kanaporis.thesis.tree;
 
 import lt.kanaporis.thesis.Fixture;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static lt.kanaporis.thesis.tree.Node.*;
@@ -121,37 +122,50 @@ public class TreeTest {
     }
 
     @Test
-    public void testEquals() throws Exception {
-        assertEquals(Fixture.origHtml, new Tree(elem("html"),
-                new Tree(elem("head")),
-                new Tree(elem("body"),
-                        new Tree(elem("h1"),
-                                new Tree(text("Hello, World!"))),
-                        new Tree(elem("p"),
-                                new Tree(text("Body text goes ")),
-                                new Tree(elem("strong"),
-                                        new Tree(text("here"))),
-                                new Tree(text("!"))))));
-        assertNotEquals(Fixture.origHtml, new Tree(elem("html"),
-                new Tree(elem("head")),
-                new Tree(elem("body"),
-                        new Tree(elem("h1")),
-                        new Tree(elem("p"),
-                                new Tree(text("Body text goes ")),
-                                new Tree(elem("strong"),
-                                        new Tree(text("here"))),
-                                new Tree(text("!"))))));
-        assertNotEquals(Fixture.origHtml, new Tree(elem("html"),
-                new Tree(elem("head")),
-                new Tree(elem("body"),
-                        new Tree(elem("h2"),
-                                new Tree(text("Hello, World!"))),
-                        new Tree(elem("p"),
-                                new Tree(text("Body text goes ")),
-                                new Tree(elem("strong"),
-                                        new Tree(text("here"))),
-                                new Tree(text("!"))))));
+    public void testEqualsTrue() throws Exception {
+        assertTrue(TreeUtils.areEqual(
+                Fixture.origHtml,
+                new Tree(elem("html"),
+                        new Tree(elem("head")),
+                        new Tree(elem("body"),
+                                new Tree(elem("h1"),
+                                        new Tree(text("Hello, World!"))),
+                                new Tree(elem("p"),
+                                        new Tree(text("Body text goes ")),
+                                        new Tree(elem("strong"),
+                                                new Tree(text("here"))),
+                                        new Tree(text("!")))))));
+    }
 
+    @Test
+    public void testEqualsFalseWithNodeTextMissing() throws Exception {
+        assertFalse(TreeUtils.areEqual(
+                Fixture.origHtml,
+                new Tree(elem("html"),
+                        new Tree(elem("head")),
+                        new Tree(elem("body"),
+                                new Tree(elem("h1")), // text missing
+                                new Tree(elem("p"),
+                                        new Tree(text("Body text goes ")),
+                                        new Tree(elem("strong"),
+                                                new Tree(text("here"))),
+                                        new Tree(text("!")))))));
+    }
+
+    @Test
+    public void testEqualsFalseWithTextNodeRenamed() throws Exception {
+        assertFalse(TreeUtils.areEqual(
+                Fixture.origHtml,
+                new Tree(elem("html"),
+                    new Tree(elem("head")),
+                    new Tree(elem("body"),
+                            new Tree(elem("h2"), // h1 → h2
+                                    new Tree(text("Hello, World!"))),
+                            new Tree(elem("p"),
+                                    new Tree(text("Body text goes ")),
+                                    new Tree(elem("strong"),
+                                            new Tree(text("here"))),
+                                    new Tree(text("!")))))));
     }
 
     @Test

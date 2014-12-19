@@ -74,7 +74,7 @@ public class Node {
     public int hashCode() {
         int result = type.hashCode();
         result = 31 * result + label.hashCode();
-        result = 31 * result + value.hashCode();
+        result = value != null ? (31 * result + value.hashCode()) : 0;
         return result;
     }
 
