@@ -21,7 +21,7 @@ public class DataRecordLocator {
     public static Set<DataRecord> locate(Tree tree) {
         Map<Tree, DiffsToNextGeneralizedNode> diffs = calcCombinations(tree);
         Map<Tree, Set<DataRecord>> dataRegions = findDataRegions(tree, diffs);
-        return identifyDataRecords(dataRegions.get(tree.root()));
+        return identifyDataRecords(dataRegions.get(tree));
     }
 
     private static Map<Tree, DiffsToNextGeneralizedNode> calcCombinations(Tree tree) {
@@ -33,7 +33,9 @@ public class DataRecordLocator {
     private static void calcRecursiveCombinations(Tree boundary, Map<Tree, DiffsToNextGeneralizedNode> diffs) {
         diffs.put(boundary, calcDirectChildCombinations(boundary));
         for (Tree child : boundary.children()) {
-            calcRecursiveCombinations(child, diffs);
+            if (child.children().size() > 0) {
+                calcRecursiveCombinations(child, diffs);
+            }
         }
     }
 
@@ -129,7 +131,7 @@ public class DataRecordLocator {
             findRecursiveDataRegions(child, diffs, dataRegions);
             tempDataRecords.addAll(uncoveredDataRegions(dataRegions.get(tree), child, dataRegions));
         }
-        dataRegions.get(tree.root()).addAll(tempDataRecords);
+        dataRegions.get(tree).addAll(tempDataRecords);
     }
 
     /**
@@ -138,8 +140,9 @@ public class DataRecordLocator {
     @SuppressWarnings("unchecked")
     private static Set<DataRecord> identifyDataRegions(int firstGenNode, Tree boundary, DiffsToNextGeneralizedNode dist) {
         DataRecord maxDR = maxDataRegion(firstGenNode, boundary, dist);
-        if (maxDR.isEmpty() || maxDR.lastPosition() == boundary.children().size()) {
-            return Collections.EMPTY_SET;
+        //if (maxDR.isEmpty() || maxDR.lastPosition() == boundary.children().size()) { // TODO why do we check for LastPos = Count(Children)
+        if (maxDR.isEmpty()) {
+            return Collections.EMPTY_SET; // TODO check the reason for failing here!
         }
         Set<DataRecord> regions = Collections.singleton(maxDR);
         regions.addAll(identifyDataRegions(maxDR.lastPosition() + 1, boundary, dist));
@@ -167,8 +170,9 @@ public class DataRecordLocator {
              nextGenNodeStart += genNodeLength) {
             if (dist.from(nextGenNodeStart - genNodeLength, genNodeLength) <= Config.EDIT_DISTANCE_THRESHOLD) {
                 if (currDR.isEmpty()) {
-                    // data region of two gen. nodes
-                    currDR = new DataRecord(nextGenNodeStart - genNodeLength).add(boundary.subforest(nextGenNodeStart - genNodeLength, nextGenNodeStart + genNodeLength - 1));
+                    currDR = new DataRecord(nextGenNodeStart - genNodeLength)
+                            .add(boundary.subforest(nextGenNodeStart - genNodeLength, nextGenNodeStart - 1))
+                            .add(boundary.subforest(nextGenNodeStart, nextGenNodeStart + genNodeLength - 1));
                 } else {
                     currDR.add(boundary.subforest(nextGenNodeStart, nextGenNodeStart + genNodeLength - 1));
                 }

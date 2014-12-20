@@ -1,12 +1,11 @@
 package lt.kanaporis.thesis.region;
 
 import lt.kanaporis.thesis.tree.Forest;
-import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 import org.apache.commons.lang3.Validate;
 
 import java.util.Collections;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 public class DataRecord {
@@ -14,7 +13,7 @@ public class DataRecord {
     public static final DataRecord EMPTY = new DataRecord(0);
 
     private final int startPosition;
-    private final Set<Forest> generalizedNodes = new HashSet<>();
+    private final Set<Forest> generalizedNodes = new LinkedHashSet<>();
 
     public DataRecord() {
         this(-1);
@@ -25,7 +24,7 @@ public class DataRecord {
     }
 
     public DataRecord add(Forest genNode) {
-        Validate.isTrue(genNode.size() == tagNodesPerGeneralizedNode());
+        Validate.isTrue(generalizedNodes.isEmpty() || genNode.size() == tagNodesPerGeneralizedNode());
         generalizedNodes.add(genNode);
         return this;
     }
@@ -46,6 +45,9 @@ public class DataRecord {
     }
 
     public Integer tagNodesPerGeneralizedNode() {
+        if (generalizedNodes.isEmpty()) {
+            return 0;
+        }
         Forest lastGenNode = generalizedNodes.iterator().next();
         return (lastGenNode != null) ? lastGenNode.size() : 0;
     }
@@ -67,11 +69,24 @@ public class DataRecord {
     }
 
     public Set<Tree> childTagNodes() {
-        Set<Tree> childTrees = new HashSet<>();
+        Set<Tree> childTrees = new LinkedHashSet<>();
         for (Forest genNode : generalizedNodes) {
             childTrees.addAll(genNode.trees());
         }
         return childTrees;
     }
 
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append('(');
+        for (Forest genNode : generalizedNodes) {
+            if (sb.length() > 1) {
+                sb.append(',');
+            }
+            sb.append(genNode.toString());
+        }
+        sb.append(')');
+        return sb.toString();
+    }
 }

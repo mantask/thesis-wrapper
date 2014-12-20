@@ -119,7 +119,7 @@ public class Tree {
 
     public Forest subforest(int from, int thru) {
         Validate.isTrue((0 <= from) && (from <= thru) && (thru <= children.size()));
-        return new Forest(children.subList(from, thru));
+        return new Forest(children.subList(from, thru + 1)); // subList([from, thru))
     }
 
     public int nodeCount() {

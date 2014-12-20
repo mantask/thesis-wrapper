@@ -23,7 +23,7 @@ public class DataRecordLocatorTest {
 
         int i = 1;
         for (Forest generalizedNode : record.generalizedNodes()) {
-            assertEquals("{tr{td{TEXT=\"" + i + "\"}}}", generalizedNode.toString());
+            assertEquals("{td{TEXT=\"" + i + "\"}}", generalizedNode.toString());
             i++;
         }
     }
@@ -44,8 +44,8 @@ public class DataRecordLocatorTest {
 
         Iterator<Forest> genNodes = record.generalizedNodes().iterator();
 
-        assertEquals("{tr{td{strong{TEXT=\"1. Guardians of the Galaxy (2014)\"}}{br}{TEXT=\"Weekend: $16.3M\"}}}", genNodes.next().toString());
-        assertEquals("{tr{td{strong{TEXT=\"2. Teenage Mutant Ninja Turtles (2014)\"}}{br}{TEXT=\"Weekend: $11.8M\"}}}", genNodes.next().toString());
-        assertEquals("{tr{td{strong{TEXT=\"3. If I Stay (2014)\"}}{br}{TEXT=\"Weekend: $9.3M\"}}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"1. Guardians of the Galaxy (2014)\"}}{br}{TEXT=\"Weekend: $16.3M\"}}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"2. Teenage Mutant Ninja Turtles (2014)\"}}{br}{TEXT=\"Weekend: $11.8M\"}}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"3. If I Stay (2014)\"}}{br}{TEXT=\"Weekend: $9.3M\"}}}", genNodes.next().toString());
     }
 }

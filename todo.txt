@@ -1,6 +1,5 @@
 Implement record-level wrapper:
 - Cover implementation with unit tests. And also walk through code by hand.
-  - calcCombinations
   - findDataRegions
   - identifyDataRecords
 - TagNodes similar inside DataRecordLocator
