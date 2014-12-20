@@ -1,7 +1,4 @@
 Implement record-level wrapper:
-- Cover implementation with unit tests. And also walk through code by hand.
-  - findDataRegions
-  - identifyDataRecords
 - TagNodes similar inside DataRecordLocator
 
 Implement HtmlRecordWrapper

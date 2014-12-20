@@ -67,6 +67,18 @@ public class Tree {
         return sb.toString().trim();
     }
 
+    public boolean depthAtLeast(int minDepth) {
+        if (minDepth == 1) {
+            return true;
+        }
+        for (Tree child : children) {
+            if (child.depthAtLeast(minDepth - 1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private boolean lastCharNotWhiteSpace(StringBuffer sb) {
         return sb.length() > 0 && sb.charAt(sb.length() - 1) != ' ';
     }
@@ -142,6 +154,18 @@ public class Tree {
         }
         for (Tree child : children) {
             if (child.contains(node)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isCoveredBy(Tree parent) {
+        if (parent == this) {
+            return true;
+        }
+        for (Tree child : parent.children()) {
+            if (this.isCoveredBy(child)) {
                 return true;
             }
         }

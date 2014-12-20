@@ -125,8 +125,11 @@ public class DataRecordLocator {
 
     private static void findRecursiveDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs,
             Map<Tree, Set<DataRecord>> dataRegions) {
+        if (!tree.depthAtLeast(3)) {
+            return;
+        }
         dataRegions.put(tree, identifyDataRegions(0, tree, diffs.get(tree)));
-        Set<DataRecord> tempDataRecords = Collections.EMPTY_SET;
+        Set<DataRecord> tempDataRecords = new LinkedHashSet<>();
         for (Tree child : tree.children()) {
             findRecursiveDataRegions(child, diffs, dataRegions);
             tempDataRecords.addAll(uncoveredDataRegions(dataRegions.get(tree), child, dataRegions));
@@ -142,9 +145,10 @@ public class DataRecordLocator {
         DataRecord maxDR = maxDataRegion(firstGenNode, boundary, dist);
         //if (maxDR.isEmpty() || maxDR.lastPosition() == boundary.children().size()) { // TODO why do we check for LastPos = Count(Children)
         if (maxDR.isEmpty()) {
-            return Collections.EMPTY_SET; // TODO check the reason for failing here!
+            return new HashSet<>();
         }
-        Set<DataRecord> regions = Collections.singleton(maxDR);
+        Set<DataRecord> regions = new HashSet<>();
+        regions.add(maxDR);
         regions.addAll(identifyDataRegions(maxDR.lastPosition() + 1, boundary, dist));
         return regions;
     }
@@ -189,21 +193,14 @@ public class DataRecordLocator {
     private static Set<DataRecord> uncoveredDataRegions(Set<DataRecord> parentDataRecords,
             Tree child, Map<Tree, Set<DataRecord>> dataRegions) {
         Set<DataRecord> diffDataRecords = new HashSet<>();
-        for (DataRecord childDataRecord : dataRegions.get(child)) {
-            if (!isCoveredBy(childDataRecord, parentDataRecords)) {
-                diffDataRecords.add(childDataRecord);
+        if (dataRegions.containsKey(child)) {
+            for (DataRecord childDataRecord : dataRegions.get(child)) {
+                if (!childDataRecord.isCoveredBy(parentDataRecords)) {
+                    diffDataRecords.add(childDataRecord);
+                }
             }
         }
         return diffDataRecords;
-    }
-
-    private static boolean isCoveredBy(DataRecord childDataRecord, Set<DataRecord> parentDataRecords) {
-        for (DataRecord parentDataRecord : parentDataRecords) {
-            if (childDataRecord.isCoveredBy(parentDataRecord)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static Set<DataRecord> identifyDataRecords(Set<DataRecord> dataRegion) {
@@ -244,8 +241,16 @@ public class DataRecordLocator {
     }
 
     private static boolean similar(Set<Tree> tagNodes) {
-        // TODO
-        return false;
+        if (tagNodes.size() > 1) {
+            Tree prev = null;
+            for (Tree curr : tagNodes) {
+                if (prev != null && prev.substantiallyDifferentFrom(curr)) {
+                    return false;
+                }
+                prev = curr;
+            }
+        }
+        return true;
     }
 
     private static boolean areTableRows(Set<Tree> childTrees) {

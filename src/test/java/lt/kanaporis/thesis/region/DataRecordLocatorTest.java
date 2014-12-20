@@ -29,9 +29,18 @@ public class DataRecordLocatorTest {
     }
 
     @Test
-    public void testLocateNonExistentRegions() throws Exception {
+    public void testLocateTextRegions() throws Exception {
         Set<DataRecord> records = DataRecordLocator.locate(Fixture.origHtml.child(1));
-        assertEquals(0, records.size());
+        assertEquals(1, records.size());
+
+        DataRecord record = records.iterator().next();
+        assertEquals(3, record.generalizedNodes().size());
+
+        Iterator<Forest> genNodes = record.generalizedNodes().iterator();
+
+        assertEquals("{TEXT=\"Body text goes \"}", genNodes.next().toString());
+        assertEquals("{strong{TEXT=\"here\"}}", genNodes.next().toString());
+        assertEquals("{TEXT=\"!\"}", genNodes.next().toString());
     }
 
     @Test
@@ -44,8 +53,8 @@ public class DataRecordLocatorTest {
 
         Iterator<Forest> genNodes = record.generalizedNodes().iterator();
 
-        assertEquals("{td{strong{TEXT=\"1. Guardians of the Galaxy (2014)\"}}{br}{TEXT=\"Weekend: $16.3M\"}}}", genNodes.next().toString());
-        assertEquals("{td{strong{TEXT=\"2. Teenage Mutant Ninja Turtles (2014)\"}}{br}{TEXT=\"Weekend: $11.8M\"}}}", genNodes.next().toString());
-        assertEquals("{td{strong{TEXT=\"3. If I Stay (2014)\"}}{br}{TEXT=\"Weekend: $9.3M\"}}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"1. Guardians of the Galaxy (2014)\"}}{br}{TEXT=\"Weekend: $16.3M\"}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"2. Teenage Mutant Ninja Turtles (2014)\"}}{br}{TEXT=\"Weekend: $11.8M\"}}", genNodes.next().toString());
+        assertEquals("{td{strong{TEXT=\"3. If I Stay (2014)\"}}{br}{TEXT=\"Weekend: $9.3M\"}}", genNodes.next().toString());
     }
 }

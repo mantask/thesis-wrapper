@@ -93,10 +93,10 @@ public class Forest {
         return trees.size() - 1;
     }
 
-    public boolean overlaps(Forest that) {
-        for (Tree thisTree : this.trees()) {
-            for (Tree thatTree : that.trees()) {
-                if (thisTree == thatTree) {
+    public boolean isCoveredBy(Forest parentForest) {
+        for (Tree child : this.trees()) {
+            for (Tree parent : parentForest.trees()) {
+                if (child.isCoveredBy(parent)) {
                     return true;
                 }
             }

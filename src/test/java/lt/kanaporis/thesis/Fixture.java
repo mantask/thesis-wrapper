@@ -10,19 +10,21 @@ import static lt.kanaporis.thesis.tree.Node.text;
 
 public class Fixture {
 
-    public static final Tree origHtml = new Tree(elem("html"),
-            new Tree(elem("head")),
-            new Tree(elem("body"),
-                new Tree(elem("h1"),
-                    new Tree(text("Hello, World!"))),
-                new Tree(elem("p"),
-                    new Tree(text("Body text goes ")),
-                    new Tree(elem("strong"),
-                        new Tree(text("here"))),
-                    new Tree(text("!")))));
+    public static final Tree origHtml =
+            new Tree(elem("html"),
+                new Tree(elem("head")),
+                new Tree(elem("body"),
+                    new Tree(elem("h1"),
+                        new Tree(text("Hello, World!"))),
+                    new Tree(elem("p"),
+                        new Tree(text("Body text goes ")),
+                        new Tree(elem("strong"),
+                            new Tree(text("here"))),
+                        new Tree(text("!")))));
 
-    public static final Tree tableHtml = new Tree(elem("table"),
-            new Tree(elem("tr"),
+    public static final Tree tableHtml =
+            new Tree(elem("table"),
+                new Tree(elem("tr"),
                     new Tree(elem("td"), new Tree(text("1"))),
                     new Tree(elem("td"), new Tree(text("2"))),
                     new Tree(elem("td"), new Tree(text("3"))),
@@ -30,25 +32,26 @@ public class Fixture {
                     new Tree(elem("td"), new Tree(text("5"))),
                     new Tree(elem("td"), new Tree(text("6")))));
 
-    public static final Tree movieHtml = new Tree(Node.elem("tr"),
-            new Tree(Node.elem("th"),
+    public static final Tree movieHtml =
+            new Tree(Node.elem("tr"),
+                new Tree(Node.elem("th"),
                     new Tree(Node.text("Title of the movie"))),
-            new Tree(Node.elem("td"),
+                new Tree(Node.elem("td"),
                     new Tree(Node.elem("strong"),
                             new Tree(Node.text("1. Guardians of the Galaxy (2014)"))),
                     new Tree(Node.elem("br")),
                     new Tree(Node.text("Weekend: $16.3M"))),
-            new Tree(Node.elem("td"),
+                new Tree(Node.elem("td"),
                     new Tree(Node.elem("strong"),
                             new Tree(Node.text("2. Teenage Mutant Ninja Turtles (2014)"))),
                     new Tree(Node.elem("br")),
                     new Tree(Node.text("Weekend: $11.8M"))),
-            new Tree(Node.elem("td"),
+                new Tree(Node.elem("td"),
                     new Tree(Node.elem("strong"),
                             new Tree(Node.text("3. If I Stay (2014)"))),
                     new Tree(Node.elem("br")),
                     new Tree(Node.text("Weekend: $9.3M"))),
-            new Tree(Node.elem("td"),
+                new Tree(Node.elem("td"),
                     new Tree(Node.elem("a"),
                             new Tree(Node.text("See more box office results at BoxOfficeMojo.com")))));
 

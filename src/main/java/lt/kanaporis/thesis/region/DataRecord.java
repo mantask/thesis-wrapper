@@ -33,10 +33,19 @@ public class DataRecord {
         return generalizedNodes.isEmpty();
     }
 
+    public boolean isCoveredBy(Set<DataRecord> parentDataRecords) {
+        for (DataRecord parentDataRecord : parentDataRecords) {
+            if (isCoveredBy(parentDataRecord)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean isCoveredBy(DataRecord that) {
         for (Forest thisGenNode : this.generalizedNodes) {
             for (Forest thatGenNode : that.generalizedNodes) {
-                if (thisGenNode.overlaps(thatGenNode)) {
+                if (thisGenNode.isCoveredBy(thatGenNode)) {
                     return true;
                 }
             }

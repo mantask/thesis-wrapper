@@ -44,7 +44,7 @@ public class ForestTest {
 
     @Test
     public void testRemoveLastTreeNode() throws Exception {
-        assertEquals("{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes\"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}",
+        assertEquals("{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}",
                 new Forest(Fixture.origHtml).removeRightmostRoot().toString());
     }
 

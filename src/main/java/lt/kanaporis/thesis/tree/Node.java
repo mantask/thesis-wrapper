@@ -24,8 +24,8 @@ public class Node {
 
     private Node(NodeType type, String label, String value) {
         this.type = type;
-        this.label = (type != NodeType.TEXT) ? label.toLowerCase() : label;
-        this.value = (value != null) ? value.trim() : null;
+        this.label = (type != NodeType.TEXT) ? label.trim().toLowerCase() : label;
+        this.value = value;
     }
 
     // -----------------------------------------------------

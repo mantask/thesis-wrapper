@@ -44,7 +44,7 @@ public class TreeTest {
     public void testToString() throws Exception {
         assertEquals("{html}", new Tree(elem("HTML")).toString());
         assertEquals("{style=\"color:red;\"}", new Tree(attr("Style", "color:red;")).toString());
-        assertEquals("{html{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes\"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}", Fixture.origHtml.toString());
+        assertEquals("{html{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}", Fixture.origHtml.toString());
     }
 
     @Test
@@ -86,7 +86,7 @@ public class TreeTest {
     @Test
     public void testTailWhenOnLeft() throws Exception {
         Node h1 = Fixture.origHtml.child(1).child(0).root();
-        assertEquals("{html{body{p{TEXT=\"Body text goes\"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}",
+        assertEquals("{html{body{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}",
                 Fixture.origHtml.tail(h1).toString());
     }
 
