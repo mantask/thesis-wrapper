@@ -8,22 +8,22 @@ import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-public class DataRecord {
+public class DataRegion {
 
-    public static final DataRecord EMPTY = new DataRecord(0);
+    public static final DataRegion EMPTY = new DataRegion(0);
 
     private final int startPosition;
     private final Set<Forest> generalizedNodes = new LinkedHashSet<>();
 
-    public DataRecord() {
+    public DataRegion() {
         this(-1);
     }
 
-    public DataRecord(int startPosition) {
+    public DataRegion(int startPosition) {
         this.startPosition = startPosition;
     }
 
-    public DataRecord add(Forest genNode) {
+    public DataRegion add(Forest genNode) {
         Validate.isTrue(generalizedNodes.isEmpty() || genNode.size() == tagNodesPerGeneralizedNode());
         generalizedNodes.add(genNode);
         return this;
@@ -33,16 +33,16 @@ public class DataRecord {
         return generalizedNodes.isEmpty();
     }
 
-    public boolean isCoveredBy(Set<DataRecord> parentDataRecords) {
-        for (DataRecord parentDataRecord : parentDataRecords) {
-            if (isCoveredBy(parentDataRecord)) {
+    public boolean isCoveredBy(Set<DataRegion> parentDataRegions) {
+        for (DataRegion parentDataRegion : parentDataRegions) {
+            if (isCoveredBy(parentDataRegion)) {
                 return true;
             }
         }
         return false;
     }
 
-    public boolean isCoveredBy(DataRecord that) {
+    public boolean isCoveredBy(DataRegion that) {
         for (Forest thisGenNode : this.generalizedNodes) {
             for (Forest thatGenNode : that.generalizedNodes) {
                 if (thisGenNode.isCoveredBy(thatGenNode)) {

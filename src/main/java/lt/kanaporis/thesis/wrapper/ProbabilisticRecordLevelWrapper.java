@@ -1,15 +1,12 @@
 package lt.kanaporis.thesis.wrapper;
 
 import lt.kanaporis.thesis.changemodel.ProbabilisticChangeModel;
-import lt.kanaporis.thesis.region.DataRecord;
-import lt.kanaporis.thesis.region.DataRecordLocator;
+import lt.kanaporis.thesis.region.DataRegion;
+import lt.kanaporis.thesis.region.DataRegionLocator;
 import lt.kanaporis.thesis.tree.Forest;
-import lt.kanaporis.thesis.tree.Node;
 import lt.kanaporis.thesis.tree.Tree;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 public class ProbabilisticRecordLevelWrapper {
@@ -32,14 +29,14 @@ public class ProbabilisticRecordLevelWrapper {
     }
 
     private ProbabilisticPageLevelWrapper buildGeneralizedRegionalWrapper(Tree tree, Tree distinguishedNode, ProbabilisticChangeModel changeModel) {
-        Set<DataRecord> records = DataRecordLocator.locate(tree);
-        DataRecord record = locateDataRegionWithDistinguishedNode(records, distinguishedNode);
+        Set<DataRegion> records = DataRegionLocator.locate(tree);
+        DataRegion record = locateDataRegionWithDistinguishedNode(records, distinguishedNode);
         Forest generalizedRecord = mergeRegionsIntoBroom(record);
-        return new ProbabilisticPageLevelWrapper(generalizedRecord.rightmostTree(), distinguishedNode, changeModel); // TODO forest vs tree wrapper
+        return new ProbabilisticPageLevelWrapper(generalizedRecord.rightmostTree(), distinguishedNode, changeModel); // TODO forest vs tree wrapper. eg some fake parent?
     }
 
-    private DataRecord locateDataRegionWithDistinguishedNode(Set<DataRecord> records, Tree distinguishedNode) {
-        for (DataRecord record : records) {
+    private DataRegion locateDataRegionWithDistinguishedNode(Set<DataRegion> records, Tree distinguishedNode) {
+        for (DataRegion record : records) {
             for (Forest generalizedNode : record.generalizedNodes()) {
                 for (Tree tagNode : generalizedNode.trees()) {
                     if (tagNode == distinguishedNode) {
@@ -51,7 +48,7 @@ public class ProbabilisticRecordLevelWrapper {
         return null;
     }
 
-    private Forest mergeRegionsIntoBroom(DataRecord record) {
+    private Forest mergeRegionsIntoBroom(DataRegion record) {
         Forest merged = null;
         for (Forest generalizedNode : record.generalizedNodes()) {
             merged = generalizedNode.merge(merged);
@@ -66,18 +63,18 @@ public class ProbabilisticRecordLevelWrapper {
      * 2. Find data regions inside new page (with candidate node).
      * 3. Match data records with regional wrapper.
      */
-    public Set<Node> wrap(Tree tree) {
-        Set<Node> attributeNodes = new HashSet<>();
+    public Set<Tree> wrap(Tree tree) {
+        Set<Tree> attributeNodes = new HashSet<>();
         for (Forest region : locateCandidateRegions(tree)) {
-            attributeNodes.add(regionalWrapper.wrap(region.rightmostTree()).root()); // TODO Forest vs Tree
+            attributeNodes.add(regionalWrapper.wrap(region.rightmostTree())); // TODO Forest vs Tree. eg some fake parent?
         }
         return attributeNodes;
     }
 
     private Set<Forest> locateCandidateRegions(Tree tree) {
         Tree candidateNode = globalWrapper.wrap(tree);
-        Set<DataRecord> records = DataRecordLocator.locate(tree);
-        DataRecord record = locateDataRegionWithDistinguishedNode(records, candidateNode);
+        Set<DataRegion> records = DataRegionLocator.locate(tree);
+        DataRegion record = locateDataRegionWithDistinguishedNode(records, candidateNode);
         return record.generalizedNodes();
     }
 }

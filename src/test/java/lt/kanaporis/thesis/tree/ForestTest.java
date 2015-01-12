@@ -11,7 +11,7 @@ public class ForestTest {
 
     @Test(expected = UnsupportedOperationException.class)
     public void testImmutability() throws Exception {
-        new Forest(Fixture.origHtml).trees().add(Fixture.origHtml);
+        new Forest(Fixture.ORIG_HTML).trees().add(Fixture.ORIG_HTML);
     }
 
     @Test
@@ -45,7 +45,7 @@ public class ForestTest {
     @Test
     public void testRemoveLastTreeNode() throws Exception {
         assertEquals("{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}",
-                new Forest(Fixture.origHtml).removeRightmostRoot().toString());
+                new Forest(Fixture.ORIG_HTML).removeRightmostRoot().toString());
     }
 
     @Test

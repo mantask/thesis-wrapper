@@ -11,7 +11,7 @@ public class PostOrderNavigatorTest {
 
     @Test
     public void testSortForNonEmpty() throws Exception {
-        List<Tree> nodes = PostOrderNavigator.sort(Fixture.origHtml);
+        List<Tree> nodes = PostOrderNavigator.sort(Fixture.ORIG_HTML);
         assertEquals(10, nodes.size());
         assertEquals("head", nodes.get(0).root().label());
         assertEquals("TEXT", nodes.get(1).root().label());

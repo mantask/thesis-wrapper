@@ -1,7 +1,6 @@
 package lt.kanaporis.thesis.tree;
 
 import lt.kanaporis.thesis.Fixture;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static lt.kanaporis.thesis.tree.Node.*;
@@ -31,7 +30,7 @@ public class TreeTest {
 
     @Test
     public void testChildWithinBounds() throws Exception {
-        assertEquals("body", Fixture.origHtml.child(1).root().toString());
+        assertEquals("body", Fixture.ORIG_HTML.child(1).root().toString());
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -44,7 +43,7 @@ public class TreeTest {
     public void testToString() throws Exception {
         assertEquals("{html}", new Tree(elem("HTML")).toString());
         assertEquals("{style=\"color:red;\"}", new Tree(attr("Style", "color:red;")).toString());
-        assertEquals("{html{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}", Fixture.origHtml.toString());
+        assertEquals("{html{head}{body{h1{TEXT=\"Hello, World!\"}}{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}", Fixture.ORIG_HTML.toString());
     }
 
     @Test
@@ -64,58 +63,58 @@ public class TreeTest {
         assertEquals("", new Tree(elem("body")).text());
         assertEquals("", new Tree(attr("style", "color:red;")).text());
         assertEquals("Hello, World!", new Tree(text(" Hello, World! ")).text());
-        assertEquals("Hello, World! Body text goes here !", Fixture.origHtml.text());
+        assertEquals("Hello, World! Body text goes here !", Fixture.ORIG_HTML.text());
     }
 
     @Test(expected = RuntimeException.class)
     public void testTailWhenNoDistinquishedNode() throws Exception {
-        Fixture.origHtml.tail(elem("h1"));
+        Fixture.ORIG_HTML.tail(elem("h1"));
     }
 
     @Test
     public void testTailForRoot() throws Exception {
-        assertNull(Fixture.origHtml.tail(Fixture.origHtml.root()));
+        assertNull(Fixture.ORIG_HTML.tail(Fixture.ORIG_HTML.root()));
     }
 
     @Test
     public void testTailWhenOnRight() throws Exception {
-        Node p = Fixture.origHtml.child(1).child(1).root();
-        assertEquals("{html{body}}", Fixture.origHtml.tail(p).toString());
+        Node p = Fixture.ORIG_HTML.child(1).child(1).root();
+        assertEquals("{html{body}}", Fixture.ORIG_HTML.tail(p).toString());
     }
 
     @Test
     public void testTailWhenOnLeft() throws Exception {
-        Node h1 = Fixture.origHtml.child(1).child(0).root();
+        Node h1 = Fixture.ORIG_HTML.child(1).child(0).root();
         assertEquals("{html{body{p{TEXT=\"Body text goes \"}{strong{TEXT=\"here\"}}{TEXT=\"!\"}}}}",
-                Fixture.origHtml.tail(h1).toString());
+                Fixture.ORIG_HTML.tail(h1).toString());
     }
 
     @Test(expected = RuntimeException.class)
     public void testPrefixWhenTreeWithoutDistNode() throws Exception {
-        Fixture.origHtml.prefix(elem("h1"));
+        Fixture.ORIG_HTML.prefix(elem("h1"));
     }
 
     @Test
     public void testPrefixWhenInMiddle() throws Exception {
-        Node h1 = Fixture.origHtml.child(1).child(0).root();
-        assertEquals("{head}", Fixture.origHtml.prefix(h1).toString());
+        Node h1 = Fixture.ORIG_HTML.child(1).child(0).root();
+        assertEquals("{head}", Fixture.ORIG_HTML.prefix(h1).toString());
     }
 
     @Test
     public void testPrefixWhenOnRight() throws Exception {
-        Node p = Fixture.origHtml.child(1).child(1).root();
-        assertEquals("{head}{h1{TEXT=\"Hello, World!\"}}", Fixture.origHtml.prefix(p).toString());
+        Node p = Fixture.ORIG_HTML.child(1).child(1).root();
+        assertEquals("{head}{h1{TEXT=\"Hello, World!\"}}", Fixture.ORIG_HTML.prefix(p).toString());
     }
 
     @Test
     public void testPrefixWhenOnLeft() throws Exception {
-        Node head = Fixture.origHtml.child(0).root();
-        assertEquals("", Fixture.origHtml.prefix(head).toString());
+        Node head = Fixture.ORIG_HTML.child(0).root();
+        assertEquals("", Fixture.ORIG_HTML.prefix(head).toString());
     }
 
     @Test
     public void testSubforest() throws Exception {
-        Forest f = Fixture.origHtml.subforest();
+        Forest f = Fixture.ORIG_HTML.subforest();
         assertEquals(2, f.trees().size());
         assertEquals("head", f.tree(0).root().label());
         assertEquals("body", f.tree(1).root().label());
@@ -124,7 +123,7 @@ public class TreeTest {
     @Test
     public void testEqualsTrue() throws Exception {
         assertTrue(TreeUtils.areEqual(
-                Fixture.origHtml,
+                Fixture.ORIG_HTML,
                 new Tree(elem("html"),
                         new Tree(elem("head")),
                         new Tree(elem("body"),
@@ -140,7 +139,7 @@ public class TreeTest {
     @Test
     public void testEqualsFalseWithNodeTextMissing() throws Exception {
         assertFalse(TreeUtils.areEqual(
-                Fixture.origHtml,
+                Fixture.ORIG_HTML,
                 new Tree(elem("html"),
                         new Tree(elem("head")),
                         new Tree(elem("body"),
@@ -155,7 +154,7 @@ public class TreeTest {
     @Test
     public void testEqualsFalseWithTextNodeRenamed() throws Exception {
         assertFalse(TreeUtils.areEqual(
-                Fixture.origHtml,
+                Fixture.ORIG_HTML,
                 new Tree(elem("html"),
                     new Tree(elem("head")),
                     new Tree(elem("body"),
@@ -176,13 +175,13 @@ public class TreeTest {
             new Tree(elem("h2")),
             new Tree(elem("h3")),
             new Tree(elem("h4"))).nodeCount());
-        assertEquals(10, Fixture.origHtml.nodeCount());
+        assertEquals(10, Fixture.ORIG_HTML.nodeCount());
     }
 
     @Test
     public void testSubstantialDifference() throws Exception {
-        assertTrue(Fixture.origHtml.substantiallyDifferentFrom(new Tree(elem("h1"))));
-        assertTrue(new Tree(elem("h1")).substantiallyDifferentFrom(Fixture.origHtml));
+        assertTrue(Fixture.ORIG_HTML.substantiallyDifferentFrom(new Tree(elem("h1"))));
+        assertTrue(new Tree(elem("h1")).substantiallyDifferentFrom(Fixture.ORIG_HTML));
     }
 
     @Test

@@ -6,17 +6,17 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class DataRecordTest {
+public class DataRegionTest {
 
     @Test
     public void testIsCovered() throws Exception {
-        DataRecord parentRecord = new DataRecord();
+        DataRegion parentRecord = new DataRegion();
         for (int i = 1; i <= 3; i++) {
-            parentRecord.add(new Forest(Fixture.movieHtml.child(i))); // tr td[1-3]
+            parentRecord.add(new Forest(Fixture.MOVIE_HTML.child(i))); // tr td[1-3]
         }
 
-        DataRecord childRecord = new DataRecord();
-        childRecord.add(Fixture.movieHtml.child(1).subforest()); // tr td[1] *
+        DataRegion childRecord = new DataRegion();
+        childRecord.add(Fixture.MOVIE_HTML.child(1).subforest()); // tr td[1] *
 
         assertTrue(childRecord.isCoveredBy(parentRecord));
     }

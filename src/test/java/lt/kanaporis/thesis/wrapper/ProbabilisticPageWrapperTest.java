@@ -50,8 +50,8 @@ public class ProbabilisticPageWrapperTest {
                                 new Tree(text("!")))));
 
         ProbabilisticPageLevelWrapper wrapper = new ProbabilisticPageLevelWrapper(
-                Fixture.origHtml,
-                Fixture.origHtml.child(1).child(1).child(1), // html→body→p→strong
+                Fixture.ORIG_HTML,
+                Fixture.ORIG_HTML.child(1).child(1).child(1), // html→body→p→strong
                 Fixture.htmlChangeModel);
 
         assertEquals("here", wrapper.wrap(transHtml).text());

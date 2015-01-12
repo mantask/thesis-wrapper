@@ -13,14 +13,14 @@ import java.util.*;
  * Locates data records inside a tree. Based on [Liu'03] paper
  * "Mining Data Records in Web Pages".
  */
-public class DataRecordLocator {
+public class DataRegionLocator {
 
     /**
      * Locate data records inside the tree with distinquished node in it.
      */
-    public static Set<DataRecord> locate(Tree tree) {
+    public static Set<DataRegion> locate(Tree tree) {
         Map<Tree, DiffsToNextGeneralizedNode> diffs = calcCombinations(tree);
-        Map<Tree, Set<DataRecord>> dataRegions = findDataRegions(tree, diffs);
+        Map<Tree, Set<DataRegion>> dataRegions = findDataRegions(tree, diffs);
         return identifyDataRecords(dataRegions.get(tree));
     }
 
@@ -117,47 +117,47 @@ public class DataRecordLocator {
     }
 */
 
-    private static Map<Tree, Set<DataRecord>> findDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs) {
-        Map<Tree, Set<DataRecord>> dataRegions = new HashMap<>();
+    private static Map<Tree, Set<DataRegion>> findDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs) {
+        Map<Tree, Set<DataRegion>> dataRegions = new HashMap<>();
         findRecursiveDataRegions(tree, diffs, dataRegions);
         return dataRegions;
     }
 
     private static void findRecursiveDataRegions(Tree tree, Map<Tree, DiffsToNextGeneralizedNode> diffs,
-            Map<Tree, Set<DataRecord>> dataRegions) {
+            Map<Tree, Set<DataRegion>> dataRegions) {
         if (!tree.depthAtLeast(3)) {
             return;
         }
         dataRegions.put(tree, identifyDataRegions(0, tree, diffs.get(tree)));
-        Set<DataRecord> tempDataRecords = new LinkedHashSet<>();
+        Set<DataRegion> tempDataRegions = new LinkedHashSet<>();
         for (Tree child : tree.children()) {
             findRecursiveDataRegions(child, diffs, dataRegions);
-            tempDataRecords.addAll(uncoveredDataRegions(dataRegions.get(tree), child, dataRegions));
+            tempDataRegions.addAll(uncoveredDataRegions(dataRegions.get(tree), child, dataRegions));
         }
-        dataRegions.get(tree).addAll(tempDataRecords);
+        dataRegions.get(tree).addAll(tempDataRegions);
     }
 
     /**
      * Identifying data regions below a node.
      */
     @SuppressWarnings("unchecked")
-    private static Set<DataRecord> identifyDataRegions(int firstGenNode, Tree boundary, DiffsToNextGeneralizedNode dist) {
-        DataRecord maxDR = maxDataRegion(firstGenNode, boundary, dist);
+    private static Set<DataRegion> identifyDataRegions(int firstGenNode, Tree boundary, DiffsToNextGeneralizedNode dist) {
+        DataRegion maxDR = maxDataRegion(firstGenNode, boundary, dist);
         //if (maxDR.isEmpty() || maxDR.lastPosition() == boundary.children().size()) { // TODO why do we check for LastPos = Count(Children)
         if (maxDR.isEmpty()) {
             return new HashSet<>();
         }
-        Set<DataRecord> regions = new HashSet<>();
+        Set<DataRegion> regions = new HashSet<>();
         regions.add(maxDR);
         regions.addAll(identifyDataRegions(maxDR.lastPosition() + 1, boundary, dist));
         return regions;
     }
 
-    private static DataRecord maxDataRegion(int firstGenNode, Tree boundary, DiffsToNextGeneralizedNode dist) {
-        DataRecord maxDR = DataRecord.EMPTY;
+    private static DataRegion maxDataRegion(int firstGenNode, Tree boundary, DiffsToNextGeneralizedNode dist) {
+        DataRegion maxDR = DataRegion.EMPTY;
         for (int genNodeLength = 1; genNodeLength <= Config.MAX_NUMBER_OF_TAGS_PER_GENERALIZED_NODE; genNodeLength++) {
             for (int genNodeStart = firstGenNode; genNodeStart < genNodeLength; genNodeStart++) {
-                DataRecord currDR = maxDataRegionFrom(genNodeStart, genNodeLength, boundary, dist);
+                DataRegion currDR = maxDataRegionFrom(genNodeStart, genNodeLength, boundary, dist);
                 if (maxDR.tagNodeCount() < currDR.tagNodeCount() &&
                         (maxDR.isEmpty() || currDR.startPosition() <= maxDR.startPosition())) {
                     maxDR = currDR;
@@ -167,14 +167,14 @@ public class DataRecordLocator {
         return maxDR;
     }
 
-    private static DataRecord maxDataRegionFrom(int genNodeStart, int genNodeLength, Tree boundary, DiffsToNextGeneralizedNode dist) {
-        DataRecord currDR = DataRecord.EMPTY;
+    private static DataRegion maxDataRegionFrom(int genNodeStart, int genNodeLength, Tree boundary, DiffsToNextGeneralizedNode dist) {
+        DataRegion currDR = DataRegion.EMPTY;
         for (int nextGenNodeStart = genNodeStart + genNodeLength;
              nextGenNodeStart + genNodeLength <= boundary.children().size();
              nextGenNodeStart += genNodeLength) {
             if (dist.from(nextGenNodeStart - genNodeLength, genNodeLength) <= Config.EDIT_DISTANCE_THRESHOLD) {
                 if (currDR.isEmpty()) {
-                    currDR = new DataRecord(nextGenNodeStart - genNodeLength)
+                    currDR = new DataRegion(nextGenNodeStart - genNodeLength)
                             .add(boundary.subforest(nextGenNodeStart - genNodeLength, nextGenNodeStart - 1))
                             .add(boundary.subforest(nextGenNodeStart, nextGenNodeStart + genNodeLength - 1));
                 } else {
@@ -190,32 +190,32 @@ public class DataRecordLocator {
     /**
      * Return DataRegions of a child that are not covered by any DR of a parent.
      */
-    private static Set<DataRecord> uncoveredDataRegions(Set<DataRecord> parentDataRecords,
-            Tree child, Map<Tree, Set<DataRecord>> dataRegions) {
-        Set<DataRecord> diffDataRecords = new HashSet<>();
+    private static Set<DataRegion> uncoveredDataRegions(Set<DataRegion> parentDataRegions,
+            Tree child, Map<Tree, Set<DataRegion>> dataRegions) {
+        Set<DataRegion> diffDataRegions = new HashSet<>();
         if (dataRegions.containsKey(child)) {
-            for (DataRecord childDataRecord : dataRegions.get(child)) {
-                if (!childDataRecord.isCoveredBy(parentDataRecords)) {
-                    diffDataRecords.add(childDataRecord);
+            for (DataRegion childDataRegion : dataRegions.get(child)) {
+                if (!childDataRegion.isCoveredBy(parentDataRegions)) {
+                    diffDataRegions.add(childDataRegion);
                 }
             }
         }
-        return diffDataRecords;
+        return diffDataRegions;
     }
 
-    private static Set<DataRecord> identifyDataRecords(Set<DataRecord> dataRegion) {
-        Set<DataRecord> dataRecords = new HashSet<>();
-        for (DataRecord dataRecord : dataRegion) {
-            dataRecords.add(findRecord(dataRecord));
+    private static Set<DataRegion> identifyDataRecords(Set<DataRegion> dataRegion) {
+        Set<DataRegion> dataRegions = new HashSet<>();
+        for (DataRegion dataRecord : dataRegion) {
+            dataRegions.add(findRecord(dataRecord));
         }
-        return dataRecords;
+        return dataRegions;
     }
 
-    private static DataRecord findRecord(DataRecord dataRecord) {
-        if (dataRecord.tagNodesPerGeneralizedNode() == 1) {
-            return findRecords1(dataRecord);
+    private static DataRegion findRecord(DataRegion dataRegion) {
+        if (dataRegion.tagNodesPerGeneralizedNode() == 1) {
+            return findRecords1(dataRegion);
         } else {
-            return findRecordsN(dataRecord);
+            return findRecordsN(dataRegion);
         }
     }
 
@@ -223,17 +223,17 @@ public class DataRecordLocator {
      * Each generalized node G in DR consists of only one tag node (or component)
      * in the tag tree.
      */
-    private static DataRecord findRecords1(DataRecord dataRecord) {
-        Set<Tree> childTrees = dataRecord.childTagNodes();
+    private static DataRegion findRecords1(DataRegion dataRegion) {
+        Set<Tree> childTrees = dataRegion.childTagNodes();
         if (similar(childTrees) && !areTableRows(childTrees)) {
             return eachAsDataRecord(childTrees);
         } else {
-            return dataRecord;
+            return dataRegion;
         }
     }
 
-    private static DataRecord eachAsDataRecord(Set<Tree> childTrees) {
-        DataRecord record = new DataRecord(-1);
+    private static DataRegion eachAsDataRecord(Set<Tree> childTrees) {
+        DataRegion record = new DataRegion(-1);
         for (Tree tree : childTrees) {
             record.add(new Forest(tree));
         }
@@ -265,12 +265,12 @@ public class DataRecordLocator {
     /**
      * A generalized node G in DR consists of n tag nodes (n > 1) or components
      */
-    private static DataRecord findRecordsN(DataRecord dataRecord) {
-        Set<Tree> childTagNodes = dataRecord.childTagNodes();
-        if (similar(childTagNodes) && sameNumberOfChildren(dataRecord.childTagNodes())) {
-            return groupCorrespondingChildrenOfEveryTagNode(dataRecord);
+    private static DataRegion findRecordsN(DataRegion dataRegion) {
+        Set<Tree> childTagNodes = dataRegion.childTagNodes();
+        if (similar(childTagNodes) && sameNumberOfChildren(dataRegion.childTagNodes())) {
+            return groupCorrespondingChildrenOfEveryTagNode(dataRegion);
         } else {
-            return dataRecord;
+            return dataRegion;
         }
     }
 
@@ -287,8 +287,8 @@ public class DataRecordLocator {
         return true;
     }
 
-    private static DataRecord groupCorrespondingChildrenOfEveryTagNode(DataRecord oldRecord) {
-        DataRecord newRecord = new DataRecord();
+    private static DataRegion groupCorrespondingChildrenOfEveryTagNode(DataRegion oldRecord) {
+        DataRegion newRecord = new DataRegion();
         for (Forest oldGenNode : oldRecord.generalizedNodes()) {
             for (int childPosition = 0; childPosition < oldGenNode.tree(0).children().size(); childPosition++) {
                 Forest newGenNode = new Forest();

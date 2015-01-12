@@ -10,7 +10,7 @@ import static lt.kanaporis.thesis.tree.Node.text;
 
 public class Fixture {
 
-    public static final Tree origHtml =
+    public static final Tree ORIG_HTML =
             new Tree(elem("html"),
                 new Tree(elem("head")),
                 new Tree(elem("body"),
@@ -22,7 +22,7 @@ public class Fixture {
                             new Tree(text("here"))),
                         new Tree(text("!")))));
 
-    public static final Tree tableHtml =
+    public static final Tree TABLE_HTML =
             new Tree(elem("table"),
                 new Tree(elem("tr"),
                     new Tree(elem("td"), new Tree(text("1"))),
@@ -32,7 +32,38 @@ public class Fixture {
                     new Tree(elem("td"), new Tree(text("5"))),
                     new Tree(elem("td"), new Tree(text("6")))));
 
-    public static final Tree movieHtml =
+    public static final Tree TABLE_WITH_HEAD_BODY_FOOT =
+            new Tree(elem("table"),
+                    new Tree(elem("thead"),
+                            new Tree(text("Header"))),
+                    new Tree(elem("tbody"),
+                            new Tree(elem("td"),
+                                    new Tree(elem("strong"),
+                                            new Tree(text("Name:"))),
+                                    new Tree(text("First"))),
+                            new Tree(elem("td"),
+                                    new Tree(elem("strong"),
+                                            new Tree(text("Name:"))),
+                                    new Tree(text("Second"))),
+                            new Tree(elem("td"),
+                                    new Tree(elem("strong"),
+                                            new Tree(text("Name:"))),
+                                    new Tree(text("Third")))),
+                    new Tree(elem("tfoot"),
+                            new Tree(text("Footer"))));
+
+    public static final Tree TABLE_WITH_JUST_BODY =
+            new Tree(elem("table"),
+                    new Tree(elem("td"),
+                            new Tree(text("Name: First"))),
+                    new Tree(elem("td"),
+                            new Tree(text("Name: Second"))),
+                    new Tree(elem("td"),
+                            new Tree(elem("strong"),
+                                    new Tree(text("Name:"))),
+                            new Tree(text("Third"))));
+
+    public static final Tree MOVIE_HTML =
             new Tree(Node.elem("tr"),
                 new Tree(Node.elem("th"),
                     new Tree(Node.text("Title of the movie"))),

@@ -32,13 +32,13 @@ public class HtmlRecordWrapper {
     public List<String> wrap(String html) {
         Document dom = Jsoup.parse(html);
         Tree tree = HtmlTreeFactory.buildFromDom(dom);
-        Set<Node> nodes = wrapper.wrap(tree);
+        Set<Tree> nodes = wrapper.wrap(tree);
         return toString(nodes);
     }
 
-    public List<String> toString(Set<Node> nodes) {
+    public List<String> toString(Set<Tree> nodes) {
         List<String> nodesStr = new ArrayList<>();
-        for (Node node : nodes) {
+        for (Tree node : nodes) {
             nodesStr.add(node.text());
         }
         return nodesStr;

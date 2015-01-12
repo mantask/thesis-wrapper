@@ -1,0 +1,9 @@
+Site: imdb.com
+Page: Most Popular TV Series/Feature Films/TV Movies
+Element: Movie title
+XPath: //*[@id="main"]/table/tbody/tr[2]/td[3]/a
+
+Site: amazon.com
+Page: Books / Last 30 days
+Element: Book title
+XPath: //*[@id="result_0"]/div[4]/h3/a
